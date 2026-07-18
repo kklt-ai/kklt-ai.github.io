@@ -1,0 +1,173 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<BaseLayout title={`${post.data.title} · 卡卡罗特AI`} description={post.data.description}>
+  <article class="container post">
+    <header class="post-header">
+      <div class="post-meta">
+        <time>{post.data.pubDate.toISOString().slice(0, 10)}</time>
+        {post.data.tags.map((tag) => <span class="badge blue">{tag}</span>)}
+      </div>
+      <h1>{post.data.title}</h1>
+      <svg class="squiggle-underline" viewBox="0 0 220 14" aria-hidden="true">
+        <path
+          d="M4 8 Q20 2 36 8 T68 8 T100 8 T132 8 T164 8 T196 8 T216 8"
+          fill="none"
+          stroke="var(--accent)"
+          stroke-width="4"
+          stroke-linecap="round"
+        />
+      </svg>
+      <p class="post-desc">{post.data.description}</p>
+    </header>
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    <footer class="post-footer">
+      <a href="/blog/" class="sketch-btn">← 返回文章列表</a>
+    </footer>
+  </article>
+</BaseLayout>
+
+<style>
+  .post {
+    max-width: 760px;
+    padding-top: 56px;
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.9rem;
+    opacity: 0.85;
+    margin-bottom: 14px;
+  }
+
+  .post-header h1 {
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    line-height: 1.35;
+  }
+
+  .post-desc {
+    margin-top: 16px;
+    font-size: 1.1rem;
+    opacity: 0.8;
+  }
+
+  .post-footer {
+    margin-top: 56px;
+  }
+
+  .prose {
+    margin-top: 40px;
+  }
+
+  .prose :global(h2) {
+    font-size: 1.5rem;
+    margin: 2.2em 0 0.7em;
+    padding-left: 14px;
+    border-left: 6px solid var(--accent-4);
+  }
+
+  .prose :global(h3) {
+    font-size: 1.2rem;
+    margin: 1.8em 0 0.6em;
+  }
+
+  .prose :global(p) {
+    margin: 0.9em 0;
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin: 0.9em 0;
+    padding-left: 1.6em;
+  }
+
+  .prose :global(li) {
+    margin: 0.35em 0;
+  }
+
+  .prose :global(blockquote) {
+    margin: 1.2em 0;
+    padding: 12px 20px;
+    border: 2px dashed rgba(43, 43, 43, 0.45);
+    border-radius: var(--squiggle);
+    background: rgba(255, 214, 90, 0.18);
+  }
+
+  .prose :global(code) {
+    font-family: 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 0.88em;
+    background: rgba(67, 97, 238, 0.1);
+    padding: 2px 6px;
+    border-radius: 6px;
+  }
+
+  .prose :global(pre) {
+    border: 2.5px solid var(--ink);
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin: 1.2em 0;
+    box-shadow: 4px 5px 0 rgba(43, 43, 43, 0.85);
+    overflow-x: auto;
+  }
+
+  .prose :global(pre code) {
+    background: none;
+    padding: 0;
+  }
+
+  .prose :global(img) {
+    border: 2.5px solid var(--ink);
+    border-radius: 14px;
+    margin: 1.2em auto;
+  }
+
+  .prose :global(a) {
+    color: var(--accent-3);
+    font-weight: 700;
+    text-decoration-style: wavy;
+    text-decoration-color: var(--accent-4);
+    text-underline-offset: 4px;
+  }
+
+  .prose :global(hr) {
+    border: none;
+    border-top: 3px dashed rgba(43, 43, 43, 0.35);
+    margin: 2em 0;
+  }
+
+  .prose :global(table) {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1.2em 0;
+  }
+
+  .prose :global(th),
+  .prose :global(td) {
+    border: 2px solid var(--ink);
+    padding: 8px 14px;
+    text-align: left;
+  }
+
+  .prose :global(th) {
+    background: rgba(255, 214, 90, 0.4);
+  }
+</style>

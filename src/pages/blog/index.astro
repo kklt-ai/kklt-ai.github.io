@@ -1,0 +1,128 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<BaseLayout title="站内博客 · 卡卡罗特AI">
+  <section class="container blog-index">
+    <div class="page-head reveal visible">
+      <h1 class="section-title">
+        站内博客
+        <svg class="doodle-star" viewBox="0 0 40 40" aria-hidden="true">
+          <path d="M20 4 L24 16 L37 16 L27 24 L31 36 L20 28 L9 36 L13 24 L3 16 L16 16 Z" fill="#a5d8ff" stroke="#2b2b2b" stroke-width="2" stroke-linejoin="round" />
+        </svg>
+      </h1>
+      <p class="page-sub">Markdown 原文备份，公众号被封也不怕 💪</p>
+    </div>
+
+    <div class="post-list">
+      {
+        posts.map((post, i) => (
+          <a
+            href={`/blog/${post.id}/`}
+            class={`post-item sketch-box reveal ${i % 2 === 1 ? 'alt' : ''}`}
+            style={`transition-delay: ${i * 70}ms`}
+          >
+            {post.data.cover && (
+              <div class="post-cover">
+                <img src={post.data.cover} alt={post.data.title} loading="lazy" />
+              </div>
+            )}
+            <div class="post-body">
+              <div class="post-meta">
+                <time>{post.data.pubDate.toISOString().slice(0, 10)}</time>
+                {post.data.tags.map((tag) => (
+                  <span class="badge blue">{tag}</span>
+                ))}
+              </div>
+              <h2>{post.data.title}</h2>
+              <p>{post.data.description}</p>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .blog-index {
+    padding-top: 56px;
+  }
+
+  .page-head {
+    margin-bottom: 40px;
+  }
+
+  .page-sub {
+    opacity: 0.75;
+    margin-top: 6px;
+  }
+
+  .post-list {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .post-item {
+    display: flex;
+    gap: 24px;
+    padding: 22px 26px;
+    text-decoration: none;
+    align-items: center;
+  }
+
+  .post-item:hover {
+    transform: translate(-3px, -4px) rotate(-0.5deg);
+    box-shadow: 7px 9px 0 rgba(43, 43, 43, 0.85);
+  }
+
+  .post-cover {
+    flex-shrink: 0;
+    width: 180px;
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .post-cover img {
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    width: 100%;
+  }
+
+  .post-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.85rem;
+    opacity: 0.85;
+    margin-bottom: 8px;
+  }
+
+  .post-body h2 {
+    font-size: 1.3rem;
+    margin-bottom: 6px;
+  }
+
+  .post-body p {
+    opacity: 0.8;
+    font-size: 0.98rem;
+  }
+
+  @media (max-width: 640px) {
+    .post-item {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .post-cover {
+      width: 100%;
+    }
+  }
+</style>

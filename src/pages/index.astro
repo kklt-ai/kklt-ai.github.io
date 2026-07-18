@@ -1,0 +1,466 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { projects } from '../data/projects';
+import { wechatArticles } from '../data/wechat-articles';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+const recentPosts = posts.slice(0, 3);
+---
+
+<BaseLayout title="卡卡罗特AI · 手绘博客">
+  <!-- ===== Hero ===== -->
+  <section class="hero container">
+    <div class="hero-text">
+      <p class="hello">你好，我是</p>
+      <h1 class="name">
+        卡卡罗特<span class="ai-badge">AI</span>
+        <svg class="squiggle-underline" viewBox="0 0 220 14" aria-hidden="true">
+          <path
+            d="M4 8 Q20 2 36 8 T68 8 T100 8 T132 8 T164 8 T196 8 T216 8"
+            fill="none"
+            stroke="var(--accent)"
+            stroke-width="4"
+            stroke-linecap="round"
+          />
+        </svg>
+      </h1>
+      <p class="intro">持续分享有用的 <span class="marker">AI 干货教程</span> ～</p>
+      <div class="hero-actions">
+        <a href="#articles" class="sketch-btn primary">看看文章 📚</a>
+        <a href="#projects" class="sketch-btn">逛逛项目 🚀</a>
+      </div>
+    </div>
+
+    <div class="hero-doodle" aria-hidden="true">
+      <svg viewBox="0 0 260 260" width="260" height="260">
+        <!-- 头 -->
+        <circle cx="130" cy="120" r="72" fill="#ffd65a" stroke="#2b2b2b" stroke-width="4" />
+        <!-- 呆毛 -->
+        <path d="M130 48 Q118 20 100 14 M130 48 Q132 16 122 6 M130 48 Q148 18 162 12" fill="none" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" />
+        <!-- 眼睛（会眨） -->
+        <g class="eyes">
+          <circle cx="104" cy="110" r="8" fill="#2b2b2b" />
+          <circle cx="156" cy="110" r="8" fill="#2b2b2b" />
+        </g>
+        <!-- 腮红 -->
+        <ellipse cx="90" cy="136" rx="10" ry="6" fill="#ff9e80" opacity="0.7" />
+        <ellipse cx="170" cy="136" rx="10" ry="6" fill="#ff9e80" opacity="0.7" />
+        <!-- 微笑 -->
+        <path d="M108 146 Q130 166 152 146" fill="none" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" />
+        <!-- 挥手 -->
+        <g class="wave-hand">
+          <path d="M198 160 Q225 140 232 112" fill="none" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" />
+          <circle cx="234" cy="106" r="12" fill="#ffd65a" stroke="#2b2b2b" stroke-width="3.5" />
+        </g>
+        <!-- 身体 -->
+        <path d="M92 186 Q130 214 168 186 L162 236 Q130 248 98 236 Z" fill="#4361ee" stroke="#2b2b2b" stroke-width="4" stroke-linejoin="round" />
+        <text x="114" y="226" font-size="20" fill="#fff" font-weight="bold">AI</text>
+      </svg>
+
+      <!-- 漂浮涂鸦 -->
+      <svg class="floaty f1" viewBox="0 0 40 40" width="36" style="--r: 8deg">
+        <path d="M20 4 L24 16 L37 16 L27 24 L31 36 L20 28 L9 36 L13 24 L3 16 L16 16 Z" fill="#ffd65a" stroke="#2b2b2b" stroke-width="2" stroke-linejoin="round" />
+      </svg>
+      <svg class="floaty f2" viewBox="0 0 48 32" width="48" style="--r: -6deg">
+        <path d="M12 24 Q4 24 4 17 Q4 10 12 10 Q13 3 22 3 Q30 3 32 9 Q42 8 43 16 Q44 24 34 24 Z" fill="#fff" stroke="#2b2b2b" stroke-width="2.5" stroke-linejoin="round" />
+      </svg>
+      <svg class="floaty f3" viewBox="0 0 28 40" width="26" style="--r: 10deg">
+        <path d="M16 2 L6 22 L13 22 L10 38 L23 16 L15 16 L20 2 Z" fill="#ff6b35" stroke="#2b2b2b" stroke-width="2" stroke-linejoin="round" />
+      </svg>
+    </div>
+  </section>
+
+  <!-- ===== 项目 ===== -->
+  <section id="projects" class="container section">
+    <div class="section-head reveal">
+      <h2 class="section-title">
+        我的 Vibe-Coding 项目
+        <svg class="doodle-star" viewBox="0 0 40 40" aria-hidden="true">
+          <path d="M20 4 L24 16 L37 16 L27 24 L31 36 L20 28 L9 36 L13 24 L3 16 L16 16 Z" fill="#ffd65a" stroke="#2b2b2b" stroke-width="2" stroke-linejoin="round" />
+        </svg>
+      </h2>
+      <p class="section-sub">灵感一来就动手，全是和 AI 结对撸出来的小玩意儿</p>
+    </div>
+
+    <div class="project-grid">
+      {
+        projects.map((p, i) => (
+          <a
+            href={p.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class={`project-card sketch-box reveal ${i % 2 === 1 ? 'alt' : ''}`}
+            style={`transition-delay: ${i * 80}ms`}
+          >
+            <span class="tape" aria-hidden="true" />
+            <div class="project-emoji">{p.emoji}</div>
+            <h3>{p.name}</h3>
+            <p class="project-desc">{p.description}</p>
+            <div class="project-foot">
+              <span class={`badge ${p.color}`}>{p.tag}</span>
+              <span class="go-arrow" aria-hidden="true">→</span>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ===== 公众号文章 ===== -->
+  <section id="articles" class="container section">
+    <div class="section-head reveal">
+      <h2 class="section-title">
+        博客文章
+        <svg class="doodle-star" viewBox="0 0 40 40" aria-hidden="true">
+          <path d="M20 4 L24 16 L37 16 L27 24 L31 36 L20 28 L9 36 L13 24 L3 16 L16 16 Z" fill="#ffb3c1" stroke="#2b2b2b" stroke-width="2" stroke-linejoin="round" />
+        </svg>
+      </h2>
+      <p class="section-sub">主阵地在公众号，点开卡片直达原文</p>
+    </div>
+
+    <div class="article-grid">
+      {
+        wechatArticles.map((a, i) => (
+          <a
+            href={a.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class={`article-card sketch-box reveal ${i % 2 === 1 ? 'alt' : ''}`}
+            style={`transition-delay: ${i * 80}ms`}
+          >
+            <div class="article-cover">
+              <img src={a.cover} alt={a.title} loading="lazy" />
+            </div>
+            <div class="article-body">
+              <div class="article-meta">
+                <span class="badge green">公众号</span>
+                <time>{a.date}</time>
+              </div>
+              <h3>{a.title}</h3>
+              <p>{a.description}</p>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- ===== 站内 Markdown 博客 ===== -->
+  <section class="container section">
+    <div class="backup-box sketch-box reveal">
+      <div class="backup-head">
+        <h2 class="section-title">站内备份文章 🗂️</h2>
+        <p class="section-sub">公众号文章偶尔会失踪，重要干货这里都有 Markdown 备份，放心看</p>
+      </div>
+      <ul class="backup-list">
+        {
+          recentPosts.map((post) => (
+            <li>
+              <a href={`/blog/${post.id}/`}>
+                <span class="backup-title">{post.data.title}</span>
+                <time>{post.data.pubDate.toISOString().slice(0, 10)}</time>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a href="/blog/" class="sketch-btn">全部站内文章 →</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .section {
+    margin-top: 96px;
+  }
+
+  .section-head {
+    margin-bottom: 36px;
+  }
+
+  .section-sub {
+    opacity: 0.75;
+    margin-top: 6px;
+  }
+
+  /* ===== Hero ===== */
+  .hero {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    padding-top: 72px;
+    min-height: 480px;
+  }
+
+  .hello {
+    font-size: 1.3rem;
+    opacity: 0.8;
+    animation: bounce-in 0.7s ease both;
+  }
+
+  .name {
+    font-size: clamp(2.6rem, 7vw, 4.2rem);
+    font-weight: 900;
+    line-height: 1.15;
+    animation: bounce-in 0.7s ease both 0.15s;
+  }
+
+  .ai-badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.55em;
+    padding: 0 16px;
+    margin-left: 8px;
+    border: 3px solid var(--ink);
+    border-radius: var(--squiggle);
+    transform: rotate(-4deg) translateY(-8px);
+    box-shadow: 3px 4px 0 rgba(43, 43, 43, 0.85);
+  }
+
+  .intro {
+    font-size: 1.35rem;
+    margin-top: 18px;
+    animation: bounce-in 0.7s ease both 0.3s;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    margin-top: 30px;
+    animation: bounce-in 0.7s ease both 0.45s;
+  }
+
+  .hero-doodle {
+    position: relative;
+    flex-shrink: 0;
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .wave-hand {
+    transform-origin: 198px 160px;
+    animation: wave 1.6s ease-in-out infinite;
+  }
+
+  @keyframes wave {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(-18deg); }
+  }
+
+  .eyes {
+    animation: blink 4.5s infinite;
+    transform-origin: 130px 110px;
+  }
+
+  @keyframes blink {
+    0%, 94%, 100% { transform: scaleY(1); }
+    97% { transform: scaleY(0.08); }
+  }
+
+  .floaty {
+    position: absolute;
+    animation: float 3.4s ease-in-out infinite;
+  }
+
+  .f1 { top: -18px; left: -30px; animation-delay: 0.2s; }
+  .f2 { top: 30px; right: -44px; animation-delay: 0.9s; }
+  .f3 { bottom: 10px; left: -40px; animation-delay: 1.5s; }
+
+  /* ===== 项目卡片 ===== */
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 28px;
+  }
+
+  .project-card {
+    position: relative;
+    display: block;
+    padding: 26px 22px 20px;
+    text-decoration: none;
+  }
+
+  .project-card:hover {
+    transform: translateY(-6px) rotate(-1.2deg);
+    box-shadow: 7px 9px 0 rgba(43, 43, 43, 0.85);
+  }
+
+  .project-card:nth-child(even):hover {
+    transform: translateY(-6px) rotate(1.2deg);
+  }
+
+  .tape {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    width: 84px;
+    height: 24px;
+    transform: translateX(-50%) rotate(-3deg);
+    background: rgba(255, 214, 90, 0.75);
+    border: 1.5px dashed rgba(43, 43, 43, 0.4);
+  }
+
+  .project-emoji {
+    font-size: 2.4rem;
+    line-height: 1;
+    margin-bottom: 12px;
+    transition: transform 0.25s ease;
+  }
+
+  .project-card:hover .project-emoji {
+    transform: scale(1.25) rotate(-8deg);
+  }
+
+  .project-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+
+  .project-desc {
+    font-size: 0.95rem;
+    opacity: 0.8;
+    min-height: 3.4em;
+  }
+
+  .project-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+  }
+
+  .go-arrow {
+    font-size: 1.3rem;
+    font-weight: 900;
+    transition: transform 0.2s ease;
+  }
+
+  .project-card:hover .go-arrow {
+    transform: translateX(6px);
+    color: var(--accent);
+  }
+
+  /* ===== 文章卡片 ===== */
+  .article-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+  }
+
+  .article-card {
+    display: block;
+    text-decoration: none;
+    overflow: hidden;
+  }
+
+  .article-card:hover {
+    transform: translateY(-6px) rotate(-0.8deg);
+    box-shadow: 7px 9px 0 rgba(43, 43, 43, 0.85);
+  }
+
+  .article-cover {
+    border-bottom: 2.5px solid var(--ink);
+    overflow: hidden;
+  }
+
+  .article-cover img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .article-card:hover .article-cover img {
+    transform: scale(1.05) rotate(0.5deg);
+  }
+
+  .article-body {
+    padding: 18px 20px 22px;
+  }
+
+  .article-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 0.85rem;
+    opacity: 0.9;
+  }
+
+  .article-body h3 {
+    font-size: 1.15rem;
+    margin-bottom: 8px;
+    line-height: 1.45;
+  }
+
+  .article-body p {
+    font-size: 0.95rem;
+    opacity: 0.8;
+  }
+
+  /* ===== 站内备份 ===== */
+  .backup-box {
+    padding: 36px 40px;
+  }
+
+  .backup-head {
+    margin-bottom: 20px;
+  }
+
+  .backup-list {
+    list-style: none;
+    margin-bottom: 26px;
+  }
+
+  .backup-list li a {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 12px 4px;
+    text-decoration: none;
+    border-bottom: 2px dashed rgba(43, 43, 43, 0.3);
+    transition: background 0.2s ease, padding-left 0.2s ease;
+  }
+
+  .backup-list li a:hover {
+    background: var(--highlight);
+    padding-left: 12px;
+  }
+
+  .backup-title {
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+
+  .backup-list time {
+    flex-shrink: 0;
+    font-size: 0.88rem;
+    opacity: 0.65;
+  }
+
+  @media (max-width: 800px) {
+    .hero {
+      flex-direction: column-reverse;
+      text-align: center;
+      padding-top: 40px;
+    }
+
+    .hero-actions {
+      justify-content: center;
+    }
+
+    .hero-doodle svg:first-child {
+      width: 200px;
+      height: 200px;
+    }
+
+    .backup-box {
+      padding: 26px 22px;
+    }
+  }
+</style>

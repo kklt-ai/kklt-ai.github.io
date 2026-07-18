@@ -1,0 +1,224 @@
+/* ===== 手绘风格全局样式 ===== */
+@import url('https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.7.0/style.css');
+
+:root {
+  --ink: #2b2b2b;
+  --paper: #fdf9ef;
+  --accent: #ff6b35;
+  --accent-2: #4a7c59;
+  --accent-3: #4361ee;
+  --accent-4: #f4b942;
+  --highlight: rgba(255, 214, 90, 0.55);
+  --card-bg: #fffdf6;
+  --font-hand: 'LXGW WenKai Screen', 'Kaiti SC', 'STKaiti', 'KaiTi', cursive;
+  /* 经典手绘不规则圆角 */
+  --squiggle: 255px 15px 225px 15px / 15px 225px 15px 255px;
+  --squiggle-2: 15px 225px 15px 255px / 225px 15px 255px 15px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-hand);
+  color: var(--ink);
+  background-color: var(--paper);
+  /* 纸张点阵纹理 */
+  background-image: radial-gradient(rgba(43, 43, 43, 0.08) 1px, transparent 1.5px);
+  background-size: 24px 24px;
+  line-height: 1.75;
+  font-size: 18px;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--highlight);
+}
+
+a {
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.container {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ===== 手绘边框卡片 ===== */
+.sketch-box {
+  background: var(--card-bg);
+  border: 2.5px solid var(--ink);
+  border-radius: var(--squiggle);
+  box-shadow: 4px 5px 0 rgba(43, 43, 43, 0.85);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.sketch-box.alt {
+  border-radius: var(--squiggle-2);
+}
+
+/* ===== 手绘按钮 ===== */
+.sketch-btn {
+  display: inline-block;
+  font-family: var(--font-hand);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ink);
+  background: var(--card-bg);
+  border: 2.5px solid var(--ink);
+  border-radius: var(--squiggle);
+  padding: 8px 22px;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 3px 4px 0 rgba(43, 43, 43, 0.85);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.sketch-btn:hover {
+  transform: translate(-2px, -2px) rotate(-1deg);
+  box-shadow: 6px 7px 0 rgba(43, 43, 43, 0.85);
+  background: #fff3d6;
+}
+
+.sketch-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0 rgba(43, 43, 43, 0.85);
+}
+
+.sketch-btn.primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.sketch-btn.primary:hover {
+  background: #ff7f50;
+}
+
+/* ===== 标记笔高亮 ===== */
+.marker {
+  position: relative;
+  white-space: nowrap;
+}
+
+.marker::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  right: -4px;
+  bottom: 4px;
+  height: 0.55em;
+  background: var(--highlight);
+  z-index: -1;
+  transform: skew(-8deg) rotate(-1deg);
+  border-radius: 4px;
+}
+
+/* ===== 波浪下划线（SVG 画入动画） ===== */
+.squiggle-underline {
+  display: block;
+  width: 220px;
+  margin-top: 4px;
+}
+
+.squiggle-underline path {
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  animation: draw-in 1.4s ease forwards 0.3s;
+}
+
+@keyframes draw-in {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ===== 通用动画 ===== */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
+  50% { transform: translateY(-12px) rotate(var(--r, 0deg)); }
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(-2deg); }
+  50% { transform: rotate(2deg); }
+}
+
+@keyframes bounce-in {
+  0% { opacity: 0; transform: translateY(30px) scale(0.95); }
+  60% { opacity: 1; transform: translateY(-6px) scale(1.02); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 滚动渐入 */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===== 章节标题 ===== */
+.section-title {
+  font-size: 2rem;
+  font-weight: 900;
+  display: inline-block;
+  position: relative;
+  margin-bottom: 8px;
+}
+
+.section-title .doodle-star {
+  position: absolute;
+  top: -18px;
+  right: -34px;
+  width: 30px;
+  animation: spin-slow 10s linear infinite;
+  transform-origin: center;
+}
+
+/* ===== 标签徽章 ===== */
+.badge {
+  display: inline-block;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 1px 12px;
+  border: 2px solid var(--ink);
+  border-radius: var(--squiggle);
+  background: #fff;
+  line-height: 1.6;
+}
+
+.badge.green { background: #dcedc8; }
+.badge.orange { background: #ffe0b2; }
+.badge.blue { background: #d6e4ff; }
+.badge.pink { background: #ffd6e7; }
+
+/* ===== 减少动画偏好 ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

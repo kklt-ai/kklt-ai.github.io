@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225" font-family="Kaiti SC, cursive">
+  <rect width="400" height="225" fill="#fff3d6"/>
+  <path d="M20 20 Q200 8 380 22 Q392 110 378 205 Q200 218 22 204 Q10 112 20 20 Z" fill="none" stroke="#2b2b2b" stroke-width="3"/>
+  <circle cx="320" cy="55" r="26" fill="#ffd65a" stroke="#2b2b2b" stroke-width="3"/>
+  <path d="M320 18 L320 8 M348 30 L356 22 M358 55 L370 55 M348 80 L356 88 M292 30 L284 22 M282 55 L270 55" stroke="#2b2b2b" stroke-width="3" stroke-linecap="round"/>
+  <rect x="50" y="70" width="150" height="95" rx="8" fill="#fff" stroke="#2b2b2b" stroke-width="3"/>
+  <path d="M65 95 L110 95 M65 112 L140 112 M65 129 L120 129" stroke="#4361ee" stroke-width="4" stroke-linecap="round"/>
+  <text x="235" y="135" font-size="34" font-weight="bold" fill="#2b2b2b">Cursor</text>
+  <text x="235" y="170" font-size="22" fill="#ff6b35">ÝÆ§Y</text>
+</svg>

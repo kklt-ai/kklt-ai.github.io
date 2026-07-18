@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 225" font-family="Kaiti SC, cursive">
+  <rect width="400" height="225" fill="#ffd6e7"/>
+  <path d="M20 20 Q200 8 380 22 Q392 110 378 205 Q200 218 22 204 Q10 112 20 20 Z" fill="none" stroke="#2b2b2b" stroke-width="3"/>
+  <path d="M60 160 L110 120 L160 140 L230 80 L300 100 L345 55" fill="none" stroke="#4a7c59" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M320 55 L345 55 L345 80" fill="none" stroke="#4a7c59" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="110" cy="120" r="6" fill="#ff6b35"/>
+  <circle cx="160" cy="140" r="6" fill="#ff6b35"/>
+  <circle cx="230" cy="80" r="6" fill="#ff6b35"/>
+  <circle cx="300" cy="100" r="6" fill="#ff6b35"/>
+  <text x="60" y="55" font-size="34">=°</text>
+  <text x="95" y="195" font-size="24" font-weight="bold" fill="#2b2b2b">AI ož«</text>
+</svg>
