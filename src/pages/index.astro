@@ -1,8 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { projects } from '../data/projects';
 import { wechatArticles } from '../data/wechat-articles';
+import avatar from '../assets/avatar.jpg';
 
 const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
@@ -34,40 +36,19 @@ const recentPosts = posts.slice(0, 3);
       </div>
     </div>
 
-    <div class="hero-doodle" aria-hidden="true">
-      <svg viewBox="0 0 260 260" width="260" height="260">
-        <!-- 头 -->
-        <circle cx="130" cy="120" r="72" fill="#ffd65a" stroke="#2b2b2b" stroke-width="4" />
-        <!-- 呆毛 -->
-        <path d="M130 48 Q118 20 100 14 M130 48 Q132 16 122 6 M130 48 Q148 18 162 12" fill="none" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" />
-        <!-- 眼睛（会眨） -->
-        <g class="eyes">
-          <circle cx="104" cy="110" r="8" fill="#2b2b2b" />
-          <circle cx="156" cy="110" r="8" fill="#2b2b2b" />
-        </g>
-        <!-- 腮红 -->
-        <ellipse cx="90" cy="136" rx="10" ry="6" fill="#ff9e80" opacity="0.7" />
-        <ellipse cx="170" cy="136" rx="10" ry="6" fill="#ff9e80" opacity="0.7" />
-        <!-- 微笑 -->
-        <path d="M108 146 Q130 166 152 146" fill="none" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" />
-        <!-- 挥手 -->
-        <g class="wave-hand">
-          <path d="M198 160 Q225 140 232 112" fill="none" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" />
-          <circle cx="234" cy="106" r="12" fill="#ffd65a" stroke="#2b2b2b" stroke-width="3.5" />
-        </g>
-        <!-- 身体 -->
-        <path d="M92 186 Q130 214 168 186 L162 236 Q130 248 98 236 Z" fill="#4361ee" stroke="#2b2b2b" stroke-width="4" stroke-linejoin="round" />
-        <text x="114" y="226" font-size="20" fill="#fff" font-weight="bold">AI</text>
-      </svg>
+    <div class="hero-doodle">
+      <div class="hero-avatar">
+        <Image src={avatar} alt="卡卡罗特AI 头像" width={260} height={260} densities={[1, 2]} />
+      </div>
 
       <!-- 漂浮涂鸦 -->
-      <svg class="floaty f1" viewBox="0 0 40 40" width="36" style="--r: 8deg">
+      <svg class="floaty f1" viewBox="0 0 40 40" width="36" style="--r: 8deg" aria-hidden="true">
         <path d="M20 4 L24 16 L37 16 L27 24 L31 36 L20 28 L9 36 L13 24 L3 16 L16 16 Z" fill="#ffd65a" stroke="#2b2b2b" stroke-width="2" stroke-linejoin="round" />
       </svg>
-      <svg class="floaty f2" viewBox="0 0 48 32" width="48" style="--r: -6deg">
+      <svg class="floaty f2" viewBox="0 0 48 32" width="48" style="--r: -6deg" aria-hidden="true">
         <path d="M12 24 Q4 24 4 17 Q4 10 12 10 Q13 3 22 3 Q30 3 32 9 Q42 8 43 16 Q44 24 34 24 Z" fill="#fff" stroke="#2b2b2b" stroke-width="2.5" stroke-linejoin="round" />
       </svg>
-      <svg class="floaty f3" viewBox="0 0 28 40" width="26" style="--r: 10deg">
+      <svg class="floaty f3" viewBox="0 0 28 40" width="26" style="--r: 10deg" aria-hidden="true">
         <path d="M16 2 L6 22 L13 22 L10 38 L23 16 L15 16 L20 2 Z" fill="#ff6b35" stroke="#2b2b2b" stroke-width="2" stroke-linejoin="round" />
       </svg>
     </div>
@@ -241,24 +222,27 @@ const recentPosts = posts.slice(0, 3);
     animation: float 4s ease-in-out infinite;
   }
 
-  .wave-hand {
-    transform-origin: 198px 160px;
-    animation: wave 1.6s ease-in-out infinite;
+  .hero-avatar {
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    border: 4px solid var(--ink);
+    box-shadow: 5px 6px 0 rgba(43, 43, 43, 0.85);
+    transform: rotate(-2deg);
+    overflow: hidden;
+    background: var(--card-bg);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
   }
 
-  @keyframes wave {
-    0%, 100% { transform: rotate(0deg); }
-    50% { transform: rotate(-18deg); }
+  .hero-avatar:hover {
+    transform: rotate(0deg) scale(1.03);
+    box-shadow: 7px 9px 0 rgba(43, 43, 43, 0.85);
   }
 
-  .eyes {
-    animation: blink 4.5s infinite;
-    transform-origin: 130px 110px;
-  }
-
-  @keyframes blink {
-    0%, 94%, 100% { transform: scaleY(1); }
-    97% { transform: scaleY(0.08); }
+  .hero-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 
   .floaty {
@@ -454,7 +438,7 @@ const recentPosts = posts.slice(0, 3);
       justify-content: center;
     }
 
-    .hero-doodle svg:first-child {
+    .hero-avatar {
       width: 200px;
       height: 200px;
     }

@@ -1,5 +1,5 @@
 /* ===== 手绘风格全局样式 ===== */
-@import url('https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.7.0/style.css');
+@import url('https://fontsapi.zeoseven.com/501/main/result.css');
 
 :root {
   --ink: #2b2b2b;
@@ -10,7 +10,7 @@
   --accent-4: #f4b942;
   --highlight: rgba(255, 214, 90, 0.55);
   --card-bg: #fffdf6;
-  --font-hand: 'LXGW WenKai Screen', 'Kaiti SC', 'STKaiti', 'KaiTi', cursive;
+  --font-hand: '平方手书体', 'Kaiti SC', 'STKaiti', 'KaiTi', cursive;
   /* 经典手绘不规则圆角 */
   --squiggle: 255px 15px 225px 15px / 15px 225px 15px 255px;
   --squiggle-2: 15px 225px 15px 255px / 225px 15px 255px 15px;
