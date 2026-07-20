@@ -1,15 +1,11 @@
 ---
-import { getCollection } from 'astro:content';
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { projects } from '../data/projects';
-import { wechatArticles } from '../data/wechat-articles';
+import { getAllArticles } from '../data/articles';
 import avatar from '../assets/avatar.jpg';
 
-const posts = (await getCollection('blog')).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
-const recentPosts = posts.slice(0, 3);
+const articles = (await getAllArticles()).slice(0, 5);
 ---
 
 <BaseLayout title="卡卡罗特AI · 手绘博客">
@@ -90,7 +86,7 @@ const recentPosts = posts.slice(0, 3);
     </div>
   </section>
 
-  <!-- ===== 公众号文章 ===== -->
+  <!-- ===== 文章 ===== -->
   <section id="articles" class="container section">
     <div class="section-head reveal">
       <h2 class="section-title">
@@ -99,25 +95,27 @@ const recentPosts = posts.slice(0, 3);
           <path d="M20 4 L24 16 L37 16 L27 24 L31 36 L20 28 L9 36 L13 24 L3 16 L16 16 Z" fill="#ffb3c1" stroke="#2b2b2b" stroke-width="2" stroke-linejoin="round" />
         </svg>
       </h2>
-      <p class="section-sub">主阵地在公众号，点开卡片直达原文</p>
+      <p class="section-sub">公众号与站内文章按时间排列，点开卡片直达原文</p>
     </div>
 
     <div class="article-grid">
       {
-        wechatArticles.slice(0, 5).map((a, i) => (
+        articles.map((a, i) => (
           <a
             href={a.url}
-            target="_blank"
-            rel="noopener noreferrer"
+            target={a.external ? '_blank' : undefined}
+            rel={a.external ? 'noopener noreferrer' : undefined}
             class={`article-card sketch-box reveal ${i % 2 === 1 ? 'alt' : ''}`}
             style={`transition-delay: ${i * 80}ms`}
           >
-            <div class="article-cover">
-              <img src={a.cover} alt={a.title} loading="lazy" />
-            </div>
+            {a.cover && (
+              <div class="article-cover">
+                <img src={a.cover} alt={a.title} loading="lazy" />
+              </div>
+            )}
             <div class="article-body">
               <div class="article-meta">
-                <span class="badge green">公众号</span>
+                <span class={`badge ${a.source === '公众号' ? 'green' : 'blue'}`}>{a.source}</span>
                 <time>{a.date}</time>
               </div>
               <h3>{a.title}</h3>
@@ -127,28 +125,9 @@ const recentPosts = posts.slice(0, 3);
         ))
       }
     </div>
-  </section>
 
-  <!-- ===== 站内 Markdown 博客 ===== -->
-  <section class="container section">
-    <div class="backup-box sketch-box reveal">
-      <div class="backup-head">
-        <h2 class="section-title">站内备份文章 🗂️</h2>
-        <p class="section-sub">公众号文章偶尔会失踪，重要干货这里都有 Markdown 备份，放心看</p>
-      </div>
-      <ul class="backup-list">
-        {
-          recentPosts.map((post) => (
-            <li>
-              <a href={`/blog/${post.id}/`}>
-                <span class="backup-title">{post.data.title}</span>
-                <time>{post.data.pubDate.toISOString().slice(0, 10)}</time>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-      <a href="/blog/" class="sketch-btn">全部站内文章 →</a>
+    <div class="section-more reveal">
+      <a href="/blog/" class="sketch-btn">全部文章 →</a>
     </div>
   </section>
 </BaseLayout>
@@ -397,45 +376,10 @@ const recentPosts = posts.slice(0, 3);
     overflow: hidden;
   }
 
-  /* ===== 站内备份 ===== */
-  .backup-box {
-    padding: 36px 40px;
-  }
-
-  .backup-head {
-    margin-bottom: 20px;
-  }
-
-  .backup-list {
-    list-style: none;
-    margin-bottom: 26px;
-  }
-
-  .backup-list li a {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 16px;
-    padding: 12px 4px;
-    text-decoration: none;
-    border-bottom: 2px dashed rgba(43, 43, 43, 0.3);
-    transition: background 0.2s ease, padding-left 0.2s ease;
-  }
-
-  .backup-list li a:hover {
-    background: var(--highlight);
-    padding-left: 12px;
-  }
-
-  .backup-title {
-    font-weight: 700;
-    font-size: 1.05rem;
-  }
-
-  .backup-list time {
-    flex-shrink: 0;
-    font-size: 0.88rem;
-    opacity: 0.65;
+  /* ===== 全部文章入口 ===== */
+  .section-more {
+    margin-top: 36px;
+    text-align: center;
   }
 
   @media (max-width: 800px) {
@@ -462,10 +406,6 @@ const recentPosts = posts.slice(0, 3);
       width: 100%;
       border-right: none;
       border-bottom: 2.5px solid var(--ink);
-    }
-
-    .backup-box {
-      padding: 26px 22px;
     }
   }
 </style>
