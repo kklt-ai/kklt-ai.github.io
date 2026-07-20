@@ -104,7 +104,7 @@ const recentPosts = posts.slice(0, 3);
 
     <div class="article-grid">
       {
-        wechatArticles.map((a, i) => (
+        wechatArticles.slice(0, 5).map((a, i) => (
           <a
             href={a.url}
             target="_blank"
@@ -178,6 +178,7 @@ const recentPosts = posts.slice(0, 3);
   }
 
   .hello {
+    font-family: var(--font-hand);
     font-size: 1.3rem;
     opacity: 0.8;
     animation: bounce-in 0.7s ease both;
@@ -204,6 +205,7 @@ const recentPosts = posts.slice(0, 3);
   }
 
   .intro {
+    font-family: var(--font-hand);
     font-size: 1.35rem;
     margin-top: 18px;
     animation: bounce-in 0.7s ease both 0.3s;
@@ -328,15 +330,16 @@ const recentPosts = posts.slice(0, 3);
     color: var(--accent);
   }
 
-  /* ===== 文章卡片 ===== */
+  /* ===== 文章卡片（横向长方形：左封面，右标题/描述） ===== */
   .article-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
   }
 
   .article-card {
-    display: block;
+    display: flex;
+    align-items: stretch;
     text-decoration: none;
     overflow: hidden;
   }
@@ -347,12 +350,15 @@ const recentPosts = posts.slice(0, 3);
   }
 
   .article-cover {
-    border-bottom: 2.5px solid var(--ink);
+    flex-shrink: 0;
+    width: 240px;
+    border-right: 2.5px solid var(--ink);
     overflow: hidden;
   }
 
   .article-cover img {
     width: 100%;
+    height: 100%;
     aspect-ratio: 16 / 9;
     object-fit: cover;
     transition: transform 0.4s ease;
@@ -363,6 +369,7 @@ const recentPosts = posts.slice(0, 3);
   }
 
   .article-body {
+    flex: 1;
     padding: 18px 20px 22px;
   }
 
@@ -384,6 +391,10 @@ const recentPosts = posts.slice(0, 3);
   .article-body p {
     font-size: 0.95rem;
     opacity: 0.8;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   /* ===== 站内备份 ===== */
@@ -441,6 +452,16 @@ const recentPosts = posts.slice(0, 3);
     .hero-avatar {
       width: 200px;
       height: 200px;
+    }
+
+    .article-card {
+      flex-direction: column;
+    }
+
+    .article-cover {
+      width: 100%;
+      border-right: none;
+      border-bottom: 2.5px solid var(--ink);
     }
 
     .backup-box {

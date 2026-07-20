@@ -11,6 +11,7 @@
   --highlight: rgba(255, 214, 90, 0.55);
   --card-bg: #fffdf6;
   --font-hand: '平方手书体', 'Kaiti SC', 'STKaiti', 'KaiTi', cursive;
+  --font-apple: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Helvetica Neue', 'Microsoft YaHei', sans-serif;
   /* 经典手绘不规则圆角 */
   --squiggle: 255px 15px 225px 15px / 15px 225px 15px 255px;
   --squiggle-2: 15px 225px 15px 255px / 225px 15px 255px 15px;
@@ -27,7 +28,7 @@ html {
 }
 
 body {
-  font-family: var(--font-hand);
+  font-family: var(--font-apple);
   color: var(--ink);
   background-color: var(--paper);
   /* 纸张点阵纹理 */
@@ -40,6 +41,14 @@ body {
 
 ::selection {
   background: var(--highlight);
+}
+
+/* 手写字体只用于标题 */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-hand);
 }
 
 a {
@@ -73,7 +82,6 @@ img {
 /* ===== 手绘按钮 ===== */
 .sketch-btn {
   display: inline-block;
-  font-family: var(--font-hand);
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--ink);
