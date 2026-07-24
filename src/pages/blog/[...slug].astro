@@ -146,6 +146,18 @@ const recentArticles = (await getAllArticles())
     padding-top: 56px;
   }
 
+  /* 详情页不用手写体，正文/标题更易读 */
+  .post-layout h1,
+  .post-layout h2,
+  .post-layout h3,
+  .post-layout h4,
+  .prose :global(h1),
+  .prose :global(h2),
+  .prose :global(h3),
+  .prose :global(h4) {
+    font-family: var(--font-apple);
+  }
+
   .post-layout.has-toc {
     display: grid;
     grid-template-columns: minmax(0, 1fr) 230px;
@@ -174,7 +186,6 @@ const recentArticles = (await getAllArticles())
     display: flex;
     align-items: center;
     gap: 8px;
-    font-family: var(--font-hand);
     font-size: 1.05rem;
     font-weight: 900;
     margin: 0 0 10px;
@@ -255,7 +266,6 @@ const recentArticles = (await getAllArticles())
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    font-family: var(--font-hand);
     font-size: 1rem;
     font-weight: 700;
     color: rgba(43, 43, 43, 0.75);
