@@ -6,8 +6,6 @@ tags: ['RAG', 'AI 原理']
 cover: /covers/cover-3.svg
 ---
 
-> 这是公众号同名文章的 Markdown 备份版本。
-
 ## 一句话版本
 
 RAG（Retrieval-Augmented Generation，检索增强生成）就是：**先查资料，再回答问题**。

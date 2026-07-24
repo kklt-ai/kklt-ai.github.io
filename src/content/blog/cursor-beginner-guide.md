@@ -6,8 +6,6 @@ tags: ['AI 编程', 'Cursor']
 cover: /covers/cover-1.svg
 ---
 
-> 这是公众号同名文章的 Markdown 备份版本。原文如果失效，这里永远都在。
-
 ## 为什么是 Cursor？
 
 传统写代码的流程是：想清楚 → 查文档 → 敲代码 → 调试。而用 Cursor，你只需要把「想清楚」这一步做好，剩下的交给 AI。

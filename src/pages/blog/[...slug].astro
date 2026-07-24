@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getAllArticles } from '../../data/articles';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -11,16 +12,19 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+
+// 最近两篇其他文章（含公众号文章），用于文末引流
+const recentArticles = (await getAllArticles())
+  .filter((a) => a.url !== `/blog/${post.id}/`)
+  .slice(0, 2);
 ---
 
 <BaseLayout title={`${post.data.title} · 卡卡罗特AI`} description={post.data.description}>
-  <article class="container post">
+  <div class={`container post-layout ${tocHeadings.length > 0 ? 'has-toc' : ''}`}>
+  <article class="post">
     <header class="post-header">
-      <div class="post-meta">
-        <time>{post.data.pubDate.toISOString().slice(0, 10)}</time>
-        {post.data.tags.map((tag) => <span class="badge blue">{tag}</span>)}
-      </div>
       <h1>{post.data.title}</h1>
       <svg class="squiggle-underline" viewBox="0 0 220 14" aria-hidden="true">
         <path
@@ -31,51 +35,356 @@ const { Content } = await render(post);
           stroke-linecap="round"
         />
       </svg>
-      <p class="post-desc">{post.data.description}</p>
+      <div class="post-meta">
+        <time class="post-date">
+          <svg viewBox="0 0 24 24" aria-hidden="true" class="date-icon">
+            <rect x="3" y="5" width="18" height="16" rx="3" fill="none" stroke="currentColor" stroke-width="2" />
+            <path d="M3 10 H21" stroke="currentColor" stroke-width="2" />
+            <path d="M8 3 V7 M16 3 V7" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+          </svg>
+          {post.data.pubDate.toISOString().slice(0, 10)}
+        </time>
+        {post.data.tags.map((tag) => <span class="post-tag"># {tag}</span>)}
+      </div>
+      {post.data.description && <p class="post-desc">{post.data.description}</p>}
+      <p class="post-notice">📌 公众号同名文章备份 · 原文失效时这里仍可阅读</p>
     </header>
 
     <div class="prose">
       <Content />
     </div>
 
+    {
+      recentArticles.length > 0 && (
+        <section class="read-more" aria-label="继续阅读">
+          <h2 class="read-more-title">
+            继续阅读
+            <svg viewBox="0 0 40 40" aria-hidden="true" class="read-more-doodle">
+              <path d="M6 20 Q14 8 20 20 T34 20" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" />
+            </svg>
+          </h2>
+          <div class="read-more-grid">
+            {recentArticles.map((a, i) => (
+              <a
+                href={a.url}
+                target={a.external ? '_blank' : undefined}
+                rel={a.external ? 'noopener noreferrer' : undefined}
+                class={`read-more-card sketch-box ${i % 2 === 1 ? 'alt' : ''}`}
+              >
+                <time class="read-more-date">{a.date}</time>
+                <h3>{a.title}</h3>
+              </a>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
     <footer class="post-footer">
       <a href="/blog/" class="sketch-btn">← 返回文章列表</a>
     </footer>
   </article>
+
+  {
+    tocHeadings.length > 0 && (
+      <aside class="toc-panel" aria-label="文章大纲">
+        <nav class="toc sketch-box">
+          <p class="toc-title">
+            <svg viewBox="0 0 24 24" aria-hidden="true" class="toc-icon">
+              <path d="M5 6 H8 M11 6 H19 M5 12 H8 M11 12 H19 M5 18 H8 M11 18 H19" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" />
+            </svg>
+            本文大纲
+          </p>
+          <ul>
+            {tocHeadings.map((h) => (
+              <li class={`toc-item depth-${h.depth}`}>
+                <a href={`#${h.slug}`}>{h.text}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </aside>
+    )
+  }
+  </div>
 </BaseLayout>
 
+<script>
+  // 大纲滚动高亮：正文标题进入视口上方区域时点亮对应链接
+  const links = document.querySelectorAll('.toc a');
+  const headingEls = Array.from(links)
+    .map((link) => {
+      const id = decodeURIComponent(link.getAttribute('href')!.slice(1));
+      return document.getElementById(id);
+    })
+    .filter((el): el is HTMLElement => el !== null);
+
+  if (headingEls.length > 0) {
+    const setActive = (id: string) => {
+      links.forEach((link) => {
+        link.classList.toggle('active', decodeURIComponent(link.getAttribute('href')!.slice(1)) === id);
+      });
+    };
+
+    const onScroll = () => {
+      const offset = 110;
+      let current = headingEls[0];
+      for (const el of headingEls) {
+        if (el.getBoundingClientRect().top <= offset) current = el;
+        else break;
+      }
+      setActive(current.id);
+    };
+
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+  }
+</script>
+
 <style>
-  .post {
-    max-width: 760px;
+  .post-layout {
     padding-top: 56px;
   }
 
-  .post-meta {
+  .post-layout.has-toc {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 230px;
+    gap: 44px;
+    align-items: start;
+  }
+
+  .post {
+    max-width: 760px;
+    min-width: 0;
+  }
+
+  /* ===== 右侧大纲 ===== */
+  .toc-panel {
+    position: sticky;
+    top: 92px;
+  }
+
+  .toc {
+    padding: 16px 18px 18px;
+    max-height: calc(100vh - 130px);
+    overflow-y: auto;
+  }
+
+  .toc-title {
     display: flex;
     align-items: center;
-    gap: 12px;
-    font-size: 0.9rem;
-    opacity: 0.85;
-    margin-bottom: 14px;
+    gap: 8px;
+    font-family: var(--font-hand);
+    font-size: 1.05rem;
+    font-weight: 900;
+    margin: 0 0 10px;
+    padding-bottom: 8px;
+    border-bottom: 2px dashed rgba(43, 43, 43, 0.3);
+  }
+
+  .toc-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .toc ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .toc-item {
+    margin: 2px 0;
+  }
+
+  .toc-item.depth-3 {
+    padding-left: 16px;
+  }
+
+  .toc-item a {
+    display: block;
+    padding: 4px 8px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: rgba(43, 43, 43, 0.65);
+    text-decoration: none;
+    border-radius: 8px;
+    border-left: 3px solid transparent;
+    transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  }
+
+  .toc-item a:hover {
+    color: var(--ink);
+    background: rgba(255, 214, 90, 0.3);
+  }
+
+  .toc-item a.active {
+    color: var(--ink);
+    font-weight: 700;
+    background: rgba(255, 214, 90, 0.45);
+    border-left-color: var(--accent);
+  }
+
+  @media (max-width: 1080px) {
+    .post-layout.has-toc {
+      display: block;
+    }
+
+    .toc-panel {
+      display: none;
+    }
   }
 
   .post-header h1 {
     font-size: clamp(1.8rem, 5vw, 2.6rem);
     line-height: 1.35;
+    margin: 0;
+  }
+
+  .post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 12px;
+    margin-top: 20px;
+  }
+
+  .post-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--font-hand);
+    font-size: 1rem;
+    font-weight: 700;
+    color: rgba(43, 43, 43, 0.75);
+    font-variant-numeric: tabular-nums;
+    margin-right: 6px;
+  }
+
+  .date-icon {
+    width: 18px;
+    height: 18px;
+    color: var(--accent);
+  }
+
+  .post-tag {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 1px 12px;
+    border: 2px solid var(--ink);
+    border-radius: var(--squiggle);
+    background: #d6e4ff;
+    line-height: 1.7;
+    transform: rotate(-1deg);
+    transition: transform 0.2s ease;
+  }
+
+  .post-tag:nth-child(odd) {
+    border-radius: var(--squiggle-2);
+    transform: rotate(1deg);
+  }
+
+  .post-tag:nth-child(3n) {
+    background: #dcedc8;
+  }
+
+  .post-tag:nth-child(3n + 1) {
+    background: #ffe0b2;
+  }
+
+  .post-tag:hover {
+    transform: rotate(0deg) translateY(-2px);
   }
 
   .post-desc {
-    margin-top: 16px;
-    font-size: 1.1rem;
-    opacity: 0.8;
+    margin: 22px 0 0;
+    padding: 14px 18px;
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: rgba(43, 43, 43, 0.78);
+    background: rgba(255, 214, 90, 0.22);
+    border: 2px dashed rgba(43, 43, 43, 0.5);
+    border-radius: var(--squiggle);
+  }
+
+  .post-notice {
+    margin: 20px 0 0;
+    font-size: 0.8rem;
+    line-height: 1.6;
+    color: rgba(43, 43, 43, 0.5);
+    letter-spacing: 0.02em;
+  }
+
+  /* ===== 文末推荐 ===== */
+  .read-more {
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 3px dashed rgba(43, 43, 43, 0.3);
+  }
+
+  .read-more-title {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.4rem;
+    margin: 0 0 20px;
+  }
+
+  .read-more-doodle {
+    width: 32px;
+    flex-shrink: 0;
+  }
+
+  .read-more-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .read-more-card {
+    display: block;
+    padding: 14px 18px 16px;
+    text-decoration: none;
+  }
+
+  .read-more-card:hover {
+    transform: translateY(-5px) rotate(-0.8deg);
+    box-shadow: 6px 8px 0 rgba(43, 43, 43, 0.85);
+  }
+
+  .read-more-date {
+    display: block;
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin-bottom: 8px;
+  }
+
+  .read-more-card h3 {
+    font-size: 1.05rem;
+    line-height: 1.45;
+    margin: 0;
+  }
+
+  @media (max-width: 640px) {
+    .read-more-grid {
+      grid-template-columns: 1fr;
+    }
   }
 
   .post-footer {
-    margin-top: 56px;
+    margin-top: 40px;
   }
 
   .prose {
-    margin-top: 40px;
+    margin-top: 36px;
+  }
+
+  .prose :global(h2),
+  .prose :global(h3) {
+    scroll-margin-top: 96px;
   }
 
   .prose :global(h2) {

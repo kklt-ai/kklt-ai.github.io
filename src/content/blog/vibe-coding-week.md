@@ -6,8 +6,6 @@ tags: ['vibe-coding', '实战复盘']
 cover: /covers/cover-2.svg
 ---
 
-> 这是公众号同名文章的 Markdown 备份版本。
-
 ## 一周成绩单
 
 | 天数 | 项目 | 耗时 |
