@@ -1,0 +1,4 @@
+interface:
+  display_name: "导入微信公众号文章"
+  short_description: "解析微信公众号正文与图片并发布到当前 Astro 博客文章列表"
+  default_prompt: "使用 $import-wechat-article 将这个微信公众号链接导入当前 Astro 博客。"
