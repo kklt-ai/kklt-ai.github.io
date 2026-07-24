@@ -1,7 +1,9 @@
 ---
 import { getCollection, render } from 'astro:content';
+import { Image } from 'astro:assets';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getAllArticles } from '../../data/articles';
+import wechatQrcode from '../../assets/wechat_qrcode.JPG';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -22,7 +24,7 @@ const recentArticles = (await getAllArticles())
 ---
 
 <BaseLayout title={`${post.data.title} · 卡卡罗特AI`} description={post.data.description}>
-  <div class={`container post-layout ${tocHeadings.length > 0 ? 'has-toc' : ''}`}>
+  <div class="container post-layout">
   <article class="post">
     <header class="post-header">
       <h1>{post.data.title}</h1>
@@ -49,6 +51,33 @@ const recentArticles = (await getAllArticles())
       {post.data.description && <p class="post-desc">{post.data.description}</p>}
       <p class="post-notice">📌 公众号同名文章备份 · 原文失效时这里仍可阅读</p>
     </header>
+
+    {
+      post.data.wechatUrl && (
+        <a
+          href={post.data.wechatUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="wechat-cta"
+        >
+          <svg class="wechat-cta-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M9 3C4.9 3 1.6 5.8 1.6 9.2c0 1.9 1.1 3.6 2.7 4.8L3.5 16.4l2.6-1.3c.9.3 1.9.4 2.9.4h.6a5.3 5.3 0 0 1-.2-1.5c0-3.3 3.2-5.9 7-5.9h.5C16.3 5.1 13 3 9 3Z"
+              fill="currentColor"
+            />
+            <path
+              d="M22.4 14c0-2.7-2.7-4.9-6-4.9s-6 2.2-6 4.9 2.7 4.9 6 4.9c.7 0 1.4-.1 2-.3l1.9 1-.5-1.7c1.6-.9 2.6-2.3 2.6-3.9Z"
+              fill="currentColor"
+            />
+          </svg>
+          <span class="wechat-cta-text">
+            <strong>点击阅读公众号原文</strong>
+            <small>关注「卡卡罗特AI」，第一时间获取更新</small>
+          </span>
+          <span class="wechat-cta-arrow" aria-hidden="true">→</span>
+        </a>
+      )
+    }
 
     <div class="prose">
       <Content />
@@ -85,9 +114,32 @@ const recentArticles = (await getAllArticles())
     </footer>
   </article>
 
-  {
-    tocHeadings.length > 0 && (
-      <aside class="toc-panel" aria-label="文章大纲">
+  <aside class="side-panel" aria-label="侧边栏">
+    <div class="follow-card sketch-box">
+      <p class="follow-card-title">
+        <svg class="follow-card-icon" viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M9 3C4.9 3 1.6 5.8 1.6 9.2c0 1.9 1.1 3.6 2.7 4.8L3.5 16.4l2.6-1.3c.9.3 1.9.4 2.9.4h.6a5.3 5.3 0 0 1-.2-1.5c0-3.3 3.2-5.9 7-5.9h.5C16.3 5.1 13 3 9 3Z"
+            fill="currentColor"
+          />
+          <path
+            d="M22.4 14c0-2.7-2.7-4.9-6-4.9s-6 2.2-6 4.9 2.7 4.9 6 4.9c.7 0 1.4-.1 2-.3l1.9 1-.5-1.7c1.6-.9 2.6-2.3 2.6-3.9Z"
+            fill="currentColor"
+          />
+        </svg>
+        关注公众号
+      </p>
+      <Image
+        src={wechatQrcode}
+        alt="卡卡罗特AI 公众号二维码"
+        width={200}
+        class="follow-card-qr"
+      />
+      <span class="follow-card-tip">微信扫码，关注「卡卡罗特AI」</span>
+    </div>
+
+    {
+      tocHeadings.length > 0 && (
         <nav class="toc sketch-box">
           <p class="toc-title">
             <svg viewBox="0 0 24 24" aria-hidden="true" class="toc-icon">
@@ -103,9 +155,9 @@ const recentArticles = (await getAllArticles())
             ))}
           </ul>
         </nav>
-      </aside>
-    )
-  }
+      )
+    }
+  </aside>
   </div>
 </BaseLayout>
 
@@ -158,9 +210,9 @@ const recentArticles = (await getAllArticles())
     font-family: var(--font-apple);
   }
 
-  .post-layout.has-toc {
+  .post-layout {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 230px;
+    grid-template-columns: minmax(0, 1fr) 240px;
     gap: 44px;
     align-items: start;
   }
@@ -170,10 +222,54 @@ const recentArticles = (await getAllArticles())
     min-width: 0;
   }
 
-  /* ===== 右侧大纲 ===== */
-  .toc-panel {
+  /* ===== 右侧边栏 ===== */
+  .side-panel {
     position: sticky;
     top: 92px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* ===== 关注公众号卡片 ===== */
+  .follow-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 18px 16px;
+    text-align: center;
+  }
+
+  .follow-card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 900;
+    color: #07c160;
+  }
+
+  .follow-card-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+
+  .follow-card-qr {
+    display: block;
+    width: 168px;
+    height: auto;
+    border: 2px solid var(--ink);
+    border-radius: 12px;
+  }
+
+  .follow-card-tip {
+    font-size: 0.82rem;
+    font-weight: 700;
+    line-height: 1.5;
+    color: rgba(43, 43, 43, 0.62);
   }
 
   .toc {
@@ -239,12 +335,23 @@ const recentArticles = (await getAllArticles())
   }
 
   @media (max-width: 1080px) {
-    .post-layout.has-toc {
+    .post-layout {
       display: block;
     }
 
-    .toc-panel {
+    .side-panel {
+      position: static;
+      margin-top: 44px;
+    }
+
+    /* 移动端隐藏大纲，仅保留关注公众号卡片 */
+    .side-panel .toc {
       display: none;
+    }
+
+    .follow-card {
+      max-width: 300px;
+      margin: 0 auto;
     }
   }
 
@@ -326,6 +433,69 @@ const recentArticles = (await getAllArticles())
     line-height: 1.6;
     color: rgba(43, 43, 43, 0.5);
     letter-spacing: 0.02em;
+  }
+
+  /* ===== 公众号引流按钮 ===== */
+  .wechat-cta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 28px 0 0;
+    padding: 16px 20px;
+    text-decoration: none;
+    color: #fff;
+    background: #07c160;
+    border: 2.5px solid var(--ink);
+    border-radius: var(--squiggle);
+    box-shadow: 4px 5px 0 rgba(43, 43, 43, 0.85);
+    transform: rotate(-0.6deg);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  }
+
+  .wechat-cta:hover {
+    background: #06ad56;
+    transform: rotate(0deg) translate(-2px, -2px);
+    box-shadow: 7px 8px 0 rgba(43, 43, 43, 0.85);
+  }
+
+  .wechat-cta:active {
+    transform: translate(2px, 2px);
+    box-shadow: 1px 1px 0 rgba(43, 43, 43, 0.85);
+  }
+
+  .wechat-cta-icon {
+    width: 34px;
+    height: 34px;
+    flex-shrink: 0;
+  }
+
+  .wechat-cta-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    line-height: 1.35;
+  }
+
+  .wechat-cta-text strong {
+    font-size: 1.1rem;
+    font-weight: 900;
+  }
+
+  .wechat-cta-text small {
+    font-size: 0.82rem;
+    opacity: 0.92;
+  }
+
+  .wechat-cta-arrow {
+    margin-left: auto;
+    font-size: 1.5rem;
+    font-weight: 900;
+    flex-shrink: 0;
+    transition: transform 0.15s ease;
+  }
+
+  .wechat-cta:hover .wechat-cta-arrow {
+    transform: translateX(4px);
   }
 
   /* ===== 文末推荐 ===== */

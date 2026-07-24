@@ -4,6 +4,7 @@ description: Hugging Face 被 AI Agent 入侵，OpenAI CEO 山姆·奥特曼认�
 pubDate: 2026-07-24
 tags: ['AI 安全', 'OpenAI', 'Hugging Face']
 cover: /blog/openai-agent-intrusion/01-hf-announce.png
+wechatUrl: https://mp.weixin.qq.com/s/s6cbAQOBEgLtE-pgeHde7w
 ---
 
 ## Agent入侵
