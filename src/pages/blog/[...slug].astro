@@ -26,6 +26,7 @@ const recentArticles = (await getAllArticles())
 <BaseLayout title={`${post.data.title} · 卡卡罗特AI`} description={post.data.description}>
   <div class="container post-layout">
   <article class="post">
+    <a href="/blog/" class="back-link">← 返回文章列表</a>
     <header class="post-header">
       <h1>{post.data.title}</h1>
       <svg class="squiggle-underline" viewBox="0 0 220 14" aria-hidden="true">
@@ -220,6 +221,23 @@ const recentArticles = (await getAllArticles())
   .post {
     max-width: 760px;
     min-width: 0;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 28px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: rgba(43, 43, 43, 0.65);
+    text-decoration: none;
+    transition: color 0.15s ease, transform 0.15s ease;
+  }
+
+  .back-link:hover {
+    color: var(--ink);
+    transform: translateX(-3px);
   }
 
   /* ===== 右侧边栏 ===== */
