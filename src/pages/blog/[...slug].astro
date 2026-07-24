@@ -601,6 +601,12 @@ const recentArticles = (await getAllArticles())
     margin: 0.9em 0;
   }
 
+  .prose :global(strong),
+  .prose :global(b) {
+    color: var(--accent);
+    font-weight: 800;
+  }
+
   .prose :global(ul),
   .prose :global(ol) {
     margin: 0.9em 0;
