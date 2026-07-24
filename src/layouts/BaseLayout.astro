@@ -22,17 +22,10 @@ const { title, description = '卡卡罗特AI · 持续分享有用的AI干货教
     <header class="site-header">
       <nav class="container nav-inner">
         <a href="/" class="logo" aria-label="回到首页">
-          <svg class="logo-doodle" viewBox="0 0 44 44" width="40" height="40" aria-hidden="true">
-            <circle cx="22" cy="22" r="18" fill="#ffd65a" stroke="#2b2b2b" stroke-width="2.5" />
-            <circle cx="15" cy="19" r="2.4" fill="#2b2b2b" />
-            <circle cx="29" cy="19" r="2.4" fill="#2b2b2b" />
-            <path d="M14 28 Q22 35 30 28" fill="none" stroke="#2b2b2b" stroke-width="2.5" stroke-linecap="round" />
-            <path d="M22 4 L19 -2 M22 4 L25 -2" stroke="#2b2b2b" stroke-width="2.5" stroke-linecap="round" />
-          </svg>
           <span>卡卡罗特AI</span>
         </a>
         <div class="nav-links">
-          <a href="/#projects">项目</a>
+          <a href="/projects/">项目</a>
           <a href="/blog/">文章</a>
         </div>
       </nav>
@@ -90,18 +83,9 @@ const { title, description = '卡卡罗特AI · 持续分享有用的AI干货教
       .logo {
         display: flex;
         align-items: center;
-        gap: 10px;
         font-size: 1.35rem;
         font-weight: 900;
         text-decoration: none;
-      }
-
-      .logo-doodle {
-        transition: transform 0.3s ease;
-      }
-
-      .logo:hover .logo-doodle {
-        transform: rotate(15deg) scale(1.1);
       }
 
       .nav-links {
@@ -154,10 +138,6 @@ const { title, description = '卡卡罗特AI · 持续分享有用的AI干货教
         .nav-links {
           gap: 14px;
           font-size: 0.95rem;
-        }
-
-        .logo span {
-          display: none;
         }
       }
     </style>

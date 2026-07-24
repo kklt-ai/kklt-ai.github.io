@@ -1,0 +1,138 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { projects } from '../../data/projects';
+---
+
+<BaseLayout title="全部项目 · 卡卡罗特AI" description="卡卡罗特AI 的 Vibe-Coding 项目合集">
+  <section class="container projects-index">
+    <div class="page-head reveal visible">
+      <h1 class="section-title">
+        全部 Vibe-Coding 项目
+        <svg class="doodle-star" viewBox="0 0 40 40" aria-hidden="true">
+          <path d="M20 4 L24 16 L37 16 L27 24 L31 36 L20 28 L9 36 L13 24 L3 16 L16 16 Z" fill="#ffd65a" stroke="#2b2b2b" stroke-width="2" stroke-linejoin="round" />
+        </svg>
+      </h1>
+    </div>
+
+    <div class="project-grid">
+      {
+        projects.map((p, i) => (
+          <a
+            href={p.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class={`project-card sketch-box reveal ${i % 2 === 1 ? 'alt' : ''}`}
+            style={`transition-delay: ${i * 70}ms`}
+          >
+            <span class="tape" aria-hidden="true" />
+            {p.featured && <span class="hot-tag">精选</span>}
+            <div class="project-emoji">{p.emoji}</div>
+            <h3>{p.name}</h3>
+            <p class="project-desc">{p.description}</p>
+            <div class="project-foot">
+              <span class={`badge ${p.color}`}>{p.tag}</span>
+              <span class="go-arrow" aria-hidden="true">→</span>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .projects-index {
+    padding-top: 56px;
+    padding-bottom: 40px;
+  }
+
+  .page-head {
+    margin-bottom: 40px;
+  }
+
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 28px;
+  }
+
+  .project-card {
+    position: relative;
+    display: block;
+    padding: 26px 22px 20px;
+    text-decoration: none;
+  }
+
+  .project-card:hover {
+    transform: translateY(-6px) rotate(-1.2deg);
+    box-shadow: 7px 9px 0 rgba(43, 43, 43, 0.85);
+  }
+
+  .project-card:nth-child(even):hover {
+    transform: translateY(-6px) rotate(1.2deg);
+  }
+
+  .tape {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    width: 84px;
+    height: 24px;
+    transform: translateX(-50%) rotate(-3deg);
+    background: rgba(255, 214, 90, 0.75);
+    border: 1.5px dashed rgba(43, 43, 43, 0.4);
+  }
+
+  .hot-tag {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    padding: 2px 8px;
+    background: var(--highlight);
+    border: 1.5px solid var(--ink);
+    border-radius: 6px;
+    transform: rotate(6deg);
+  }
+
+  .project-emoji {
+    font-size: 2.4rem;
+    line-height: 1;
+    margin-bottom: 12px;
+    transition: transform 0.25s ease;
+  }
+
+  .project-card:hover .project-emoji {
+    transform: scale(1.25) rotate(-8deg);
+  }
+
+  .project-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 8px;
+  }
+
+  .project-desc {
+    font-size: 0.95rem;
+    opacity: 0.8;
+    min-height: 3.4em;
+  }
+
+  .project-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+  }
+
+  .go-arrow {
+    font-size: 1.3rem;
+    font-weight: 900;
+    transition: transform 0.2s ease;
+  }
+
+  .project-card:hover .go-arrow {
+    transform: translateX(6px);
+    color: var(--accent);
+  }
+</style>

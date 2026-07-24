@@ -1,10 +1,11 @@
 ---
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { projects } from '../data/projects';
+import { getFeaturedProjects } from '../data/projects';
 import { getAllArticles } from '../data/articles';
 import avatar from '../assets/avatar.jpg';
 
+const featuredProjects = getFeaturedProjects(3);
 const articles = (await getAllArticles()).slice(0, 5);
 ---
 
@@ -29,6 +30,27 @@ const articles = (await getAllArticles()).slice(0, 5);
       <div class="hero-actions">
         <a href="#articles" class="sketch-btn primary">看看文章 📚</a>
         <a href="#projects" class="sketch-btn">逛逛项目 🚀</a>
+        <div class="wechat-follow">
+          <button
+            type="button"
+            class="sketch-btn wechat-trigger"
+            aria-expanded="false"
+            aria-controls="wechat-qr-popover"
+          >
+            关注公众号
+          </button>
+          <div id="wechat-qr-popover" class="wechat-popover sketch-box" role="tooltip">
+            <span class="wechat-tape" aria-hidden="true" />
+            <img
+              src="/wechat_qrcode.JPG"
+              alt="卡卡罗特AI 微信公众号二维码"
+              width="200"
+              height="222"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        </div>
       </div>
     </div>
 
@@ -50,21 +72,20 @@ const articles = (await getAllArticles()).slice(0, 5);
     </div>
   </section>
 
-  <!-- ===== 项目 ===== -->
+  <!-- ===== Vibe Coding 精选 ===== -->
   <section id="projects" class="container section">
     <div class="section-head reveal">
       <h2 class="section-title">
-        我的 Vibe-Coding 项目
+        Vibe Coding精选
         <svg class="doodle-star" viewBox="0 0 40 40" aria-hidden="true">
           <path d="M20 4 L24 16 L37 16 L27 24 L31 36 L20 28 L9 36 L13 24 L3 16 L16 16 Z" fill="#ffd65a" stroke="#2b2b2b" stroke-width="2" stroke-linejoin="round" />
         </svg>
       </h2>
-      <p class="section-sub">灵感一来就动手，全是和 AI 结对撸出来的小玩意儿</p>
     </div>
 
-    <div class="project-grid">
+    <div class="project-spotlight">
       {
-        projects.map((p, i) => (
+        featuredProjects.map((p, i) => (
           <a
             href={p.url}
             target="_blank"
@@ -84,18 +105,21 @@ const articles = (await getAllArticles()).slice(0, 5);
         ))
       }
     </div>
+
+    <div class="section-more reveal">
+      <a href="/projects/" class="sketch-btn">全部 Vibe-Coding 项目 →</a>
+    </div>
   </section>
 
   <!-- ===== 文章 ===== -->
   <section id="articles" class="container section">
     <div class="section-head reveal">
       <h2 class="section-title">
-        博客文章
+        最新文章
         <svg class="doodle-star" viewBox="0 0 40 40" aria-hidden="true">
           <path d="M20 4 L24 16 L37 16 L27 24 L31 36 L20 28 L9 36 L13 24 L3 16 L16 16 Z" fill="#ffb3c1" stroke="#2b2b2b" stroke-width="2" stroke-linejoin="round" />
         </svg>
       </h2>
-      <p class="section-sub">公众号与站内文章按时间排列，点开卡片直达原文</p>
     </div>
 
     <div class="article-grid">
@@ -127,7 +151,7 @@ const articles = (await getAllArticles()).slice(0, 5);
     </div>
 
     <div class="section-more reveal">
-      <a href="/blog/" class="sketch-btn">全部文章 →</a>
+      <a href="/blog/" class="sketch-btn primary">查看全部文章 →</a>
     </div>
   </section>
 </BaseLayout>
@@ -139,11 +163,6 @@ const articles = (await getAllArticles()).slice(0, 5);
 
   .section-head {
     margin-bottom: 36px;
-  }
-
-  .section-sub {
-    opacity: 0.75;
-    margin-top: 6px;
   }
 
   /* ===== Hero ===== */
@@ -192,9 +211,81 @@ const articles = (await getAllArticles()).slice(0, 5);
 
   .hero-actions {
     display: flex;
+    flex-wrap: wrap;
     gap: 16px;
     margin-top: 30px;
     animation: bounce-in 0.7s ease both 0.45s;
+  }
+
+  /* 公众号：悬停/点击弹出便签二维码 */
+  .wechat-follow {
+    position: relative;
+    display: inline-block;
+  }
+
+  .wechat-popover {
+    position: absolute;
+    left: 50%;
+    bottom: calc(100% + 16px);
+    z-index: 30;
+    width: 220px;
+    padding: 14px 14px 10px;
+    background: #fff;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateX(-50%) translateY(10px) rotate(-2deg);
+    transition:
+      opacity 0.2s ease,
+      transform 0.25s ease,
+      visibility 0.2s ease;
+  }
+
+  .wechat-follow.is-open .wechat-popover {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0) rotate(-2deg);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .wechat-follow:hover .wechat-popover,
+    .wechat-follow:focus-within .wechat-popover {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0) rotate(-2deg);
+    }
+  }
+
+  .wechat-popover::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    bottom: -8px;
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    border-right: 2.5px solid var(--ink);
+    border-bottom: 2.5px solid var(--ink);
+    transform: translateX(-50%) rotate(45deg);
+  }
+
+  .wechat-tape {
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    width: 72px;
+    height: 20px;
+    transform: translateX(-50%) rotate(-4deg);
+    background: rgba(165, 216, 255, 0.85);
+    border: 1.5px dashed rgba(43, 43, 43, 0.4);
+  }
+
+  .wechat-popover img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
   }
 
   .hero-doodle {
@@ -235,10 +326,10 @@ const articles = (await getAllArticles()).slice(0, 5);
   .f2 { top: 30px; right: -44px; animation-delay: 0.9s; }
   .f3 { bottom: 10px; left: -40px; animation-delay: 1.5s; }
 
-  /* ===== 项目卡片 ===== */
-  .project-grid {
+  /* ===== Vibe Coding 精选：固定三列 ===== */
+  .project-spotlight {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 28px;
   }
 
@@ -398,6 +489,10 @@ const articles = (await getAllArticles()).slice(0, 5);
       height: 200px;
     }
 
+    .project-spotlight {
+      grid-template-columns: 1fr;
+    }
+
     .article-card {
       flex-direction: column;
     }
@@ -409,3 +504,31 @@ const articles = (await getAllArticles()).slice(0, 5);
     }
   }
 </style>
+
+<script>
+  const follow = document.querySelector('.wechat-follow');
+  const trigger = follow?.querySelector('.wechat-trigger');
+
+  if (follow && trigger instanceof HTMLButtonElement) {
+    const canHover = () => window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    trigger.addEventListener('click', (event) => {
+      if (canHover()) return;
+      event.stopPropagation();
+      const open = follow.classList.toggle('is-open');
+      trigger.setAttribute('aria-expanded', String(open));
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!(event.target instanceof Node) || follow.contains(event.target)) return;
+      follow.classList.remove('is-open');
+      trigger.setAttribute('aria-expanded', 'false');
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') return;
+      follow.classList.remove('is-open');
+      trigger.setAttribute('aria-expanded', 'false');
+    });
+  }
+</script>
