@@ -2,6 +2,13 @@
 
 持续分享有用的 AI 干货教程～
 
+<p align="center">
+  <img src="public/wechat_qrcode.JPG" alt="卡卡罗特AI 微信公众号" width="200" />
+</p>
+<p align="center">
+  <b>📱 扫码关注「卡卡罗特AI」微信公众号，第一时间获取 AI 干货推送</b>
+</p>
+
 这是一个基于 [Astro](https://astro.build/) 构建的纯静态个人博客，使用手绘风格 UI 展示 Vibe Coding 项目、微信公众号文章和站内 Markdown 文章。构建结果可部署到 Vercel、Netlify、Cloudflare Pages、GitHub Pages 等静态托管平台。
 
 ## 功能
