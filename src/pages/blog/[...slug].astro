@@ -47,7 +47,17 @@ const recentArticles = (await getAllArticles())
           </svg>
           {post.data.pubDate.toISOString().slice(0, 10)}
         </time>
-        {post.data.tags.map((tag) => <span class="post-tag"># {tag}</span>)}
+        {
+          post.data.tags.map((tag) => (
+            <a
+              href={`/blog/tag/${encodeURIComponent(tag)}/`}
+              class="post-tag"
+              aria-label={`查看标签“${tag}”下的文章`}
+            >
+              # {tag}
+            </a>
+          ))
+        }
       </div>
       {post.data.description && <p class="post-desc">{post.data.description}</p>}
       <p class="post-notice">📌 公众号同名文章备份 · 原文失效时这里仍可阅读</p>
@@ -408,6 +418,8 @@ const recentArticles = (await getAllArticles())
     display: inline-block;
     font-size: 0.8rem;
     font-weight: 700;
+    color: var(--ink);
+    text-decoration: none;
     padding: 1px 12px;
     border: 2px solid var(--ink);
     border-radius: var(--squiggle);
@@ -431,6 +443,12 @@ const recentArticles = (await getAllArticles())
   }
 
   .post-tag:hover {
+    transform: rotate(0deg) translateY(-2px);
+  }
+
+  .post-tag:focus-visible {
+    outline: 3px solid var(--accent-3);
+    outline-offset: 3px;
     transform: rotate(0deg) translateY(-2px);
   }
 
