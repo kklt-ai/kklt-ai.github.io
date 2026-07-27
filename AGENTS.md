@@ -99,6 +99,7 @@ node scripts/fetch-wechat-articles.mjs
 - 站内文章配图优先放在 `public/blog/<slug>/`，引用路径写成 `/blog/<slug>/<文件名>`。
 - 需要 Astro 图片优化的页面资源放在 `src/assets/`，并通过 import 使用。
 - 项目颜色只能使用 `green`、`orange`、`blue`、`pink`；首页精选由 `featured: true` 控制，当前最多展示 3 个。
+- 部署在外网、需要科学上网的项目标记 `needVpn: true`，项目卡片会显示「需要魔法」标志。
 
 ## 验证与交付
 

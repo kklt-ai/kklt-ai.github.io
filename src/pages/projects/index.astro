@@ -26,6 +26,7 @@ import { projects } from '../../data/projects';
           >
             <span class="tape" aria-hidden="true" />
             {p.featured && <span class="hot-tag">精选</span>}
+            {p.needVpn && <span class="vpn-tag">需要魔法</span>}
             <div class="project-emoji">{p.emoji}</div>
             <h3>{p.name}</h3>
             <p class="project-desc">{p.description}</p>
@@ -123,6 +124,26 @@ import { projects } from '../../data/projects';
     align-items: center;
     justify-content: space-between;
     margin-top: 14px;
+  }
+
+  .vpn-tag {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    padding: 3px 9px;
+    background: var(--accent);
+    color: #fff;
+    border: 1.5px solid var(--ink);
+    border-radius: 6px;
+    transform: rotate(6deg);
+  }
+
+  /* 与「精选」标同时出现时往下错开 */
+  .hot-tag + .vpn-tag {
+    top: 44px;
+    transform: rotate(-4deg);
   }
 
   .go-arrow {

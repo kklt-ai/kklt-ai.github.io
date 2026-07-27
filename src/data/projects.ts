@@ -7,6 +7,8 @@ export interface Project {
   color: 'green' | 'orange' | 'blue' | 'pink';
   /** 首页「Vibe Coding精选」展示，建议只标 2～3 个 */
   featured?: boolean;
+  /** 部署在外网、需要科学上网才能访问时标记，卡片上会显示「需要魔法」 */
+  needVpn?: boolean;
 }
 
 // 在这里维护你的 vibe-coding 个人项目，url 填项目地址即可
@@ -20,6 +22,7 @@ export const projects: Project[] = [
     tag: '效率工具',
     color: 'green',
     featured: true,
+    needVpn: true,
   },
   {
     name: '手写图片生成器',
@@ -29,6 +32,7 @@ export const projects: Project[] = [
     tag: '图片工具',
     color: 'orange',
     featured: true,
+    needVpn: true,
   },
 ];
 
