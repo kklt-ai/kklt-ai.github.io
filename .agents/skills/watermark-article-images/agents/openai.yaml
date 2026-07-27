@@ -1,4 +1,4 @@
 interface:
   display_name: "文章图片加水印"
-  short_description: "为指定博客文章的全部正文图片批量添加低干扰文字水印，且自动跳过封面"
-  default_prompt: "Use $watermark-article-images to add the default watermark to the body images of a specified article while leaving its cover unchanged."
+  short_description: "为指定文章正文图添加低干扰水印，自动跳过封面以及任一边小于200px的小图"
+  default_prompt: "Use $watermark-article-images to watermark the eligible body images of a specified article while skipping its cover and images whose width or height is below 200 pixels."

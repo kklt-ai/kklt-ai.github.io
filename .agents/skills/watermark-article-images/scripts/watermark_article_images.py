@@ -27,6 +27,7 @@ except ImportError as exc:
 DEFAULT_TEXT = "公众号: 卡卡罗特AI"
 MARKER_KEY = "kklt-watermark"
 MARKER_PREFIX = "kklt-watermark:v2:"
+MIN_WATERMARK_DIMENSION = 200
 SUPPORTED_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp"}
 POSITIONS = {"bottom-right", "bottom-left", "top-right", "top-left", "center"}
 
@@ -53,6 +54,7 @@ class ScanResult:
     cover: Path | None
     targets: tuple[Path, ...]
     already_watermarked: tuple[Path, ...]
+    too_small: tuple[tuple[Path, tuple[int, int]], ...]
     remote: tuple[str, ...]
     missing: tuple[Path, ...]
     unsupported: tuple[Path, ...]
@@ -186,10 +188,15 @@ def has_marker(image: Image.Image) -> bool:
     return False
 
 
-def inspect_image(path: Path) -> tuple[bool, bool]:
+def inspect_image(path: Path) -> tuple[bool, bool, tuple[int, int]]:
     with Image.open(path) as image:
         animated = bool(getattr(image, "is_animated", False))
-        return has_marker(image), animated
+        return has_marker(image), animated, image.size
+
+
+def is_too_small(size: tuple[int, int]) -> bool:
+    width, height = size
+    return width < MIN_WATERMARK_DIMENSION or height < MIN_WATERMARK_DIMENSION
 
 
 def scan_article(root: Path, article: Path) -> ScanResult:
@@ -205,6 +212,7 @@ def scan_article(root: Path, article: Path) -> ScanResult:
     animated: list[Path] = []
     targets: list[Path] = []
     already: list[Path] = []
+    too_small: list[tuple[Path, tuple[int, int]]] = []
     seen: set[Path] = set()
 
     for reference in references:
@@ -221,9 +229,11 @@ def scan_article(root: Path, article: Path) -> ScanResult:
         if image_path.suffix.lower() not in SUPPORTED_SUFFIXES:
             unsupported.append(image_path)
             continue
-        marked, is_animated = inspect_image(image_path)
+        marked, is_animated, size = inspect_image(image_path)
         if is_animated:
             animated.append(image_path)
+        elif is_too_small(size):
+            too_small.append((image_path, size))
         elif marked:
             already.append(image_path)
         else:
@@ -234,6 +244,7 @@ def scan_article(root: Path, article: Path) -> ScanResult:
         cover=cover,
         targets=tuple(targets),
         already_watermarked=tuple(already),
+        too_small=tuple(too_small),
         remote=tuple(remote),
         missing=tuple(missing),
         unsupported=tuple(unsupported),
@@ -435,6 +446,14 @@ def print_scan(root: Path, scan: ScanResult) -> None:
     print(f"Already watermarked: {len(scan.already_watermarked)}")
     for path in scan.already_watermarked:
         print(f"  - {display_path(root, path)}")
+    print(
+        "Skipped small images "
+        f"(width < {MIN_WATERMARK_DIMENSION} or "
+        f"height < {MIN_WATERMARK_DIMENSION}): "
+        f"{len(scan.too_small)}"
+    )
+    for path, (width, height) in scan.too_small:
+        print(f"  - {display_path(root, path)} ({width}x{height})")
     if scan.remote:
         print("Remote images (must be localized first):")
         for reference in scan.remote:
