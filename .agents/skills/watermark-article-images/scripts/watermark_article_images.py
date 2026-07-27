@@ -26,7 +26,7 @@ except ImportError as exc:
 
 DEFAULT_TEXT = "公众号: 卡卡罗特AI"
 MARKER_KEY = "kklt-watermark"
-MARKER_PREFIX = "kklt-watermark:v1:"
+MARKER_PREFIX = "kklt-watermark:v2:"
 SUPPORTED_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp"}
 POSITIONS = {"bottom-right", "bottom-left", "top-right", "top-left", "center"}
 
@@ -242,10 +242,12 @@ def scan_article(root: Path, article: Path) -> ScanResult:
 
 
 def font_candidates() -> list[Path]:
+    # Prefer lighter sans-serif faces; heavier fonts look bold when stroked.
     return [
+        Path("/System/Library/Fonts/Hiragino Sans GB.ttc"),
+        Path("/System/Library/Fonts/PingFang.ttc"),
         Path("/System/Library/Fonts/STHeiti Light.ttc"),
         Path("/System/Library/Fonts/STHeiti Medium.ttc"),
-        Path("/System/Library/Fonts/PingFang.ttc"),
         Path("/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc"),
         Path("/usr/share/fonts/opentype/noto/NotoSansCJKsc-Regular.otf"),
         Path("/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc"),
@@ -278,7 +280,7 @@ def fit_font(
 
     while size >= 6:
         font = ImageFont.truetype(str(font_path), size=size)
-        bbox = draw.textbbox((0, 0), text, font=font, stroke_width=max(1, size // 14))
+        bbox = draw.textbbox((0, 0), text, font=font, stroke_width=max(1, size // 20))
         if bbox[2] - bbox[0] <= max_width and bbox[3] - bbox[1] <= max_height:
             return font, bbox
         size -= 1
@@ -348,7 +350,7 @@ def render_watermark(
         xy = watermark_position(
             position, base.width, base.height, text_width, text_height, bbox
         )
-        stroke_width = max(1, font.size // 14)
+        stroke_width = max(1, font.size // 20)
         draw.text(
             xy,
             text,
@@ -498,8 +500,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--opacity",
         type=float,
-        default=0.28,
-        help="Text opacity from 0.05 to 0.60 (default: 0.28)",
+        default=0.35,
+        help="Text opacity from 0.05 to 0.60 (default: 0.35)",
     )
     parser.add_argument("--font", help="Path to a CJK-capable TTF/OTF/TTC font")
     parser.add_argument("--repo-root", help=argparse.SUPPRESS)
