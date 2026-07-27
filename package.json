@@ -5,7 +5,7 @@
   "description": "卡卡罗特AI 的手绘风格个人博客",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && node scripts/build-sites.mjs",
     "preview": "astro preview"
   },
   "dependencies": {
