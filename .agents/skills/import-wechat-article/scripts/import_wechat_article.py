@@ -27,6 +27,10 @@ USER_AGENT = (
 )
 IMAGE_RE = re.compile(r"!\[([^\]]*)\]\((https?://[^)\s]+)\)")
 CREATE_TIME_RE = re.compile(r'var\s+(?:create_time|ct)\s*=\s*"(\d+)"')
+COVER_URL_RES = (
+    re.compile(r'var\s+msg_cdn_url\s*=\s*"([^"]+)"'),
+    re.compile(r'var\s+cdn_url_1_1\s*=\s*"([^"]+)"'),
+)
 SLUG_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 
 
@@ -103,8 +107,17 @@ def parse_metadata(page: bytes) -> dict[str, str]:
 
     title = normalize_space(parser.values.get("og:title", ""))
     description = normalize_space(parser.values.get("og:description", ""))
+    cover_url = normalize_space(parser.values.get("og:image", ""))
+    if not cover_url:
+        for pattern in COVER_URL_RES:
+            match = pattern.search(text)
+            if match:
+                cover_url = normalize_space(match.group(1))
+                break
     if not title:
         raise RuntimeError("article title was not found; the page may be blocked")
+    if not cover_url:
+        raise RuntimeError("article cover was not found; the page may be blocked")
 
     create_time = CREATE_TIME_RE.search(text)
     if create_time:
@@ -123,6 +136,7 @@ def parse_metadata(page: bytes) -> dict[str, str]:
         "title": title,
         "description": description,
         "pubDate": published.isoformat(),
+        "coverUrl": cover_url,
     }
 
 
@@ -198,7 +212,7 @@ def extension_from(url: str, content_type: str | None) -> str:
     raise RuntimeError(f"unsupported image content type: {content_type!r}")
 
 
-def download_image(url: str, destination_base: Path, index: int, source: str) -> Path:
+def download_image(url: str, destination_base: Path, stem: str, source: str) -> Path:
     request = urllib.request.Request(
         url,
         headers={"User-Agent": USER_AGENT, "Referer": source},
@@ -213,21 +227,27 @@ def download_image(url: str, destination_base: Path, index: int, source: str) ->
     if not data or not (content_type or "").lower().startswith("image/"):
         raise RuntimeError(f"image URL did not return image data: {url}")
 
-    destination = destination_base / f"{index:02d}.{extension_from(url, content_type)}"
+    destination = destination_base / f"{stem}.{extension_from(url, content_type)}"
     destination.write_bytes(data)
     return destination
 
 
 def localize_images(
-    markdown: str, stage_dir: Path, slug: str, source_url: str
+    markdown: str,
+    stage_dir: Path,
+    slug: str,
+    source_url: str,
+    localized_urls: dict[str, str] | None = None,
 ) -> tuple[str, list[Path]]:
-    seen: dict[str, str] = {}
+    seen = dict(localized_urls or {})
     downloaded: list[Path] = []
 
     def replace(match: re.Match[str]) -> str:
         alt, url = match.group(1), match.group(2)
         if url not in seen:
-            path = download_image(url, stage_dir, len(downloaded) + 1, source_url)
+            path = download_image(
+                url, stage_dir, f"{len(downloaded) + 1:02d}", source_url
+            )
             downloaded.append(path)
             seen[url] = f"/blog/{slug}/{path.name}"
         return f"![{alt}]({seen[url]})"
@@ -313,20 +333,25 @@ def import_article(args: argparse.Namespace) -> None:
     with tempfile.TemporaryDirectory(prefix="wechat-import-") as temp:
         stage_dir = Path(temp) / "images"
         stage_dir.mkdir()
+        cover_url = metadata["coverUrl"]
+        cover_path = download_image(cover_url, stage_dir, "cover", args.url)
+        cover = f"/blog/{args.slug}/{cover_path.name}"
         localized, images = localize_images(
-            body_markdown, stage_dir, args.slug, args.url
+            body_markdown,
+            stage_dir,
+            args.slug,
+            args.url,
+            {cover_url: cover},
         )
-        cover = f"/blog/{args.slug}/{images[0].name}" if images else None
         document = build_document(
             metadata, localized, args.url, args.tag, cover
         )
 
         assets_created = False
         try:
-            if images:
-                public_blog_dir.mkdir(parents=True, exist_ok=True)
-                shutil.copytree(stage_dir, assets_target)
-                assets_created = True
+            public_blog_dir.mkdir(parents=True, exist_ok=True)
+            shutil.copytree(stage_dir, assets_target)
+            assets_created = True
             markdown_target.write_text(document, encoding="utf-8")
         except Exception:
             if markdown_target.exists():
@@ -336,8 +361,9 @@ def import_article(args: argparse.Namespace) -> None:
             raise
 
     print(f"created_markdown={markdown_target}")
+    print(f"downloaded_cover={cover}")
     print(f"localized_images={len(images)}")
-    print(f"assets_dir={assets_target if images else 'none'}")
+    print(f"assets_dir={assets_target}")
     print(f"route=/blog/{args.slug}/")
 
 
