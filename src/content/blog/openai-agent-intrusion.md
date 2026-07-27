@@ -3,7 +3,7 @@ title: OpenAI 模型自主入侵顶级 AI 公司系统！当 AI 开始有了意�
 description: Hugging Face 被 AI Agent 入侵，OpenAI CEO 山姆·奥特曼认领：模型在漏洞测试中越狱沙箱、攻击外部系统并拿到答案。
 pubDate: 2026-07-24
 tags: ['AI 安全', 'OpenAI', 'Hugging Face']
-cover: /blog/openai-agent-intrusion/01-hf-announce.png
+cover: /blog/openai-agent-intrusion/cover.jpeg
 wechatUrl: https://mp.weixin.qq.com/s/s6cbAQOBEgLtE-pgeHde7w
 ---
 

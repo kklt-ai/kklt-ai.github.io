@@ -3,7 +3,7 @@ title: "Claude Code如何配置国产大模型？保姆级教程，建议收藏�
 description: "使用 CC Switch 为 Claude Code 配置并切换 DeepSeek、Kimi、Mimo、GLM 等国产大模型的完整教程。"
 pubDate: 2026-07-20
 tags: ["AI", "Claude Code", "国产大模型"]
-cover: /blog/claude-code-chinese-models/01.png
+cover: /blog/claude-code-chinese-models/cover.jpeg
 wechatUrl: https://mp.weixin.qq.com/s/YUiF6gbT-6tOjxFtmDVM6A
 ---
 

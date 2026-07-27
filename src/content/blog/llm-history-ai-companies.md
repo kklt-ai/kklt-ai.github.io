@@ -3,7 +3,7 @@ title: AI编程入门教程02-LLM发展历程，AI 御四家十年风云：OpenA
 description: 回顾大语言模型近十年的发展，以及 OpenAI、Anthropic、谷歌和 xAI 背后的人才、资本与权力变迁。
 pubDate: 2026-07-22
 tags: ['LLM', 'OpenAI', 'Anthropic', 'AI 公司']
-cover: /blog/llm-history-ai-companies/01.png
+cover: /blog/llm-history-ai-companies/cover.jpeg
 wechatUrl: https://mp.weixin.qq.com/s/icSYU5hicgLLy2Y3pvAUHA
 ---
 
