@@ -7,6 +7,12 @@ import avatar from '../assets/avatar.jpg';
 
 const featuredProjects = getFeaturedProjects(3);
 const articles = (await getAllArticles()).slice(0, 5);
+
+// 精选项目的手绘风 SVG 图标，按项目名匹配；没有配置时回退为 emoji
+const projectIcons: Record<string, string> = {
+  公众号排版助手: `<svg viewBox="0 0 24 24" fill="none" stroke="#2b2b2b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.8 Q6 3 6.8 3 H13.4 L18 7.6 V20 Q18 20.8 17.2 20.8 H6.8 Q6 20.8 6 20 Z" fill="#fff"/><path d="M13.2 3.2 V7.8 H18"/><path d="M8.8 11.5 H15.2"/><path d="M8.8 14.3 H13.6"/><path d="M8.6 17.4 H15.4" stroke="#ff6b35" stroke-width="2.6"/></svg>`,
+  手写图片生成器: `<svg viewBox="0 0 24 24" fill="none" stroke="#2b2b2b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.2" y="4.2" width="17.6" height="15.6" rx="2.2" fill="#fff"/><path d="M6.2 15.5 Q8 10 9.8 13 Q11.6 16 13.2 11.5"/><path d="M15.2 13.8 L19.4 6.4 L20.6 7.6 L16.4 15 L14.9 15.3 Z" fill="#ffd65a"/></svg>`,
+};
 ---
 
 <BaseLayout title="卡卡罗特AI · 手绘博客">
@@ -95,8 +101,10 @@ const articles = (await getAllArticles()).slice(0, 5);
           >
             <span class="tape" aria-hidden="true" />
             {p.needVpn && <span class="vpn-tag">需要魔法</span>}
-            <div class="project-emoji">{p.emoji}</div>
-            <h3>{p.name}</h3>
+            <div class="project-head">
+              <span class="project-icon" set:html={projectIcons[p.name] ?? p.emoji} />
+              <h3>{p.name}</h3>
+            </div>
             <p class="project-desc">{p.description}</p>
             <div class="project-foot">
               <span class={`badge ${p.color}`}>{p.tag}</span>
@@ -327,17 +335,18 @@ const articles = (await getAllArticles()).slice(0, 5);
   .f2 { top: 30px; right: -44px; animation-delay: 0.9s; }
   .f3 { bottom: 10px; left: -40px; animation-delay: 1.5s; }
 
-  /* ===== Vibe Coding 精选：固定三列 ===== */
+  /* ===== Vibe Coding 精选：按项目数量自适应并居中 ===== */
   .project-spotlight {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(280px, 360px));
+    justify-content: center;
     gap: 28px;
   }
 
   .project-card {
     position: relative;
     display: block;
-    padding: 26px 22px 20px;
+    padding: 22px 20px 18px;
     text-decoration: none;
   }
 
@@ -352,35 +361,54 @@ const articles = (await getAllArticles()).slice(0, 5);
 
   .tape {
     position: absolute;
-    top: -12px;
+    top: -10px;
     left: 50%;
-    width: 84px;
-    height: 24px;
+    width: 64px;
+    height: 18px;
     transform: translateX(-50%) rotate(-3deg);
     background: rgba(255, 214, 90, 0.75);
     border: 1.5px dashed rgba(43, 43, 43, 0.4);
   }
 
-  .project-emoji {
-    font-size: 2.4rem;
+  .project-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .project-icon {
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    background: #fff;
+    border: 2.5px solid var(--ink);
+    border-radius: var(--squiggle);
+    transform: rotate(-3deg);
+    box-shadow: 2px 3px 0 rgba(43, 43, 43, 0.85);
+    font-size: 1.4rem;
     line-height: 1;
-    margin-bottom: 12px;
     transition: transform 0.25s ease;
   }
 
-  .project-card:hover .project-emoji {
-    transform: scale(1.25) rotate(-8deg);
+  .project-icon svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .project-card:hover .project-icon {
+    transform: rotate(3deg) scale(1.08);
   }
 
   .project-card h3 {
     font-size: 1.2rem;
-    margin-bottom: 8px;
   }
 
   .project-desc {
     font-size: 0.95rem;
     opacity: 0.8;
-    min-height: 3.4em;
   }
 
   .project-foot {
@@ -436,15 +464,17 @@ const articles = (await getAllArticles()).slice(0, 5);
 
   .article-cover {
     flex-shrink: 0;
-    width: 240px;
+    width: 320px;
     border-right: 2.5px solid var(--ink);
     overflow: hidden;
+    display: flex;
+    align-items: center;
   }
 
   .article-cover img {
     width: 100%;
-    height: 100%;
-    aspect-ratio: 16 / 9;
+    height: auto;
+    aspect-ratio: 2.35 / 1;
     object-fit: cover;
     transition: transform 0.4s ease;
   }
@@ -502,10 +532,6 @@ const articles = (await getAllArticles()).slice(0, 5);
     .hero-avatar {
       width: 200px;
       height: 200px;
-    }
-
-    .project-spotlight {
-      grid-template-columns: 1fr;
     }
 
     .article-card {
