@@ -1,0 +1,101 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="页面走丢了 · 卡卡罗特AI">
+  <section class="container not-found">
+    <div class="doodle-wrap" aria-hidden="true">
+      <svg class="lost-pencil" viewBox="0 0 64 64" width="72">
+        <path d="M14 50 L40 24 L48 32 L22 58 L12 60 Z" fill="#ffd65a" stroke="#2b2b2b" stroke-width="2.5" stroke-linejoin="round" />
+        <path d="M40 24 L44 20 Q46 18 48 20 Q50 22 48 24 L44 28" fill="#ff6b35" stroke="#2b2b2b" stroke-width="2.5" stroke-linejoin="round" />
+        <path d="M14 50 L12 60 L22 58" fill="#fff" stroke="#2b2b2b" stroke-width="2.5" stroke-linejoin="round" />
+      </svg>
+      <svg class="wobble-line" viewBox="0 0 200 24" preserveAspectRatio="none">
+        <path
+          d="M4 16 Q20 4 34 14 T62 16 T88 8 T112 18 T138 10 T164 16 T196 12"
+          fill="none"
+          stroke="#2b2b2b"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-dasharray="6 8"
+        />
+      </svg>
+    </div>
+    <h1 class="code">4<span class="zero">0</span>4</h1>
+    <p class="oops">哎呀，这一页走丢了…</p>
+    <p class="hint">可能是链接过期了，或者被铅笔不小心擦掉啦。</p>
+    <div class="actions">
+      <a href="/" class="sketch-btn primary">回到首页 🏠</a>
+      <a href="/blog/" class="sketch-btn">去文章列表 📚</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding-top: 72px;
+    min-height: 420px;
+  }
+
+  .doodle-wrap {
+    position: relative;
+    width: 240px;
+    margin-bottom: 8px;
+  }
+
+  .lost-pencil {
+    position: absolute;
+    top: -34px;
+    left: 6px;
+    transform: rotate(-12deg);
+    animation: pencil-wobble 3s ease-in-out infinite;
+  }
+
+  .wobble-line {
+    width: 100%;
+    height: 24px;
+  }
+
+  @keyframes pencil-wobble {
+    0%, 100% { transform: rotate(-12deg) translateX(0); }
+    50% { transform: rotate(-6deg) translateX(140px); }
+  }
+
+  .code {
+    font-size: clamp(4.5rem, 14vw, 7.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin: 8px 0 0;
+    letter-spacing: 0.04em;
+  }
+
+  .zero {
+    display: inline-block;
+    color: var(--accent);
+    transform: rotate(-8deg);
+  }
+
+  .oops {
+    font-family: var(--font-hand);
+    font-size: 1.5rem;
+    margin: 18px 0 0;
+  }
+
+  .hint {
+    margin: 10px 0 0;
+    font-size: 0.98rem;
+    opacity: 0.7;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 32px;
+  }
+</style>

@@ -1,0 +1,248 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import avatar from '../assets/avatar.jpg';
+import wechatQrcode from '../assets/wechat_qrcode.JPG';
+---
+
+<BaseLayout title="关于我 · 卡卡罗特AI" description="认识卡卡罗特AI：一个持续分享 AI 干货教程和 Vibe Coding 小项目的博主。">
+  <section class="container about">
+    <div class="about-hero sketch-box reveal visible">
+      <span class="tape" aria-hidden="true" />
+      <div class="about-avatar">
+        <Image src={avatar} alt="卡卡罗特AI 头像" width={140} height={140} densities={[1, 2]} />
+      </div>
+      <div class="about-intro">
+        <h1>
+          你好，我是卡卡罗特AI
+          <svg class="squiggle-underline" viewBox="0 0 220 14" aria-hidden="true">
+            <path
+              d="M4 8 Q20 2 36 8 T68 8 T100 8 T132 8 T164 8 T196 8 T216 8"
+              fill="none"
+              stroke="var(--accent)"
+              stroke-width="4"
+              stroke-linecap="round"
+            />
+          </svg>
+        </h1>
+        <p class="about-tagline">持续分享有用的 <span class="marker">AI 干货教程</span> ～</p>
+        <p class="about-desc">
+          热衷于折腾各种 AI 工具，喜欢把复杂的东西讲简单。
+          在这里记录踩坑经验和实用教程，也用 Vibe Coding 做一些有意思的小工具。
+        </p>
+      </div>
+    </div>
+
+    <div class="about-grid">
+      <div class="about-card sketch-box reveal visible">
+        <h2>
+          <svg viewBox="0 0 24 24" aria-hidden="true" class="card-icon">
+            <path d="M4 5.5 Q4 4.5 5 4.5 H19 Q20 4.5 20 5.5 V18.5 Q20 19.5 19 19.5 H5 Q4 19.5 4 18.5 Z" fill="#fff" stroke="#2b2b2b" stroke-width="1.8" />
+            <path d="M7.5 9 H16.5 M7.5 12.5 H14 M7.5 15.5 H15.5" stroke="#2b2b2b" stroke-width="1.8" stroke-linecap="round" />
+          </svg>
+          在写什么
+        </h2>
+        <ul>
+          <li>AI 工具上手教程与踩坑记录</li>
+          <li>大模型、Agent、RAG 等技术科普</li>
+          <li>AI 圈热点事件的个人解读</li>
+        </ul>
+        <a href="/blog/" class="card-link">去逛逛文章 →</a>
+      </div>
+
+      <div class="about-card sketch-box alt reveal visible">
+        <h2>
+          <svg viewBox="0 0 24 24" aria-hidden="true" class="card-icon">
+            <path d="M16 3 L20 7 L9 18 L4 20 L6 15 Z" fill="#fff" stroke="#2b2b2b" stroke-width="1.8" stroke-linejoin="round" />
+            <path d="M13.5 5.5 L18.5 10.5" stroke="#ff6b35" stroke-width="1.8" stroke-linecap="round" />
+          </svg>
+          在做什么
+        </h2>
+        <ul>
+          <li>用 Vibe Coding 做一些实用小工具</li>
+          <li>公众号排版助手、手写图片生成器等</li>
+          <li>持续折腾，持续上新</li>
+        </ul>
+        <a href="/projects/" class="card-link">去看看项目 →</a>
+      </div>
+
+      <div class="about-card sketch-box reveal visible about-wechat">
+        <h2>
+          <svg viewBox="0 0 24 24" aria-hidden="true" class="card-icon">
+            <path
+              d="M9 3C4.9 3 1.6 5.8 1.6 9.2c0 1.9 1.1 3.6 2.7 4.8L3.5 16.4l2.6-1.3c.9.3 1.9.4 2.9.4h.6a5.3 5.3 0 0 1-.2-1.5c0-3.3 3.2-5.9 7-5.9h.5C16.3 5.1 13 3 9 3Z"
+              fill="#07c160"
+            />
+            <path
+              d="M22.4 14c0-2.7-2.7-4.9-6-4.9s-6 2.2-6 4.9 2.7 4.9 6 4.9c.7 0 1.4-.1 2-.3l1.9 1-.5-1.7c1.6-.9 2.6-2.3 2.6-3.9Z"
+              fill="#07c160"
+            />
+          </svg>
+          找到我
+        </h2>
+        <p class="wechat-tip">文章首发在公众号「卡卡罗特AI」，扫码关注不迷路：</p>
+        <Image
+          src={wechatQrcode}
+          alt="卡卡罗特AI 公众号二维码"
+          width={180}
+          class="wechat-qr"
+        />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about {
+    padding-top: 56px;
+  }
+
+  /* ===== 顶部自我介绍 ===== */
+  .about-hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    padding: 36px 40px;
+  }
+
+  .tape {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    width: 72px;
+    height: 20px;
+    transform: translateX(-50%) rotate(-3deg);
+    background: rgba(255, 214, 90, 0.75);
+    border: 1.5px dashed rgba(43, 43, 43, 0.4);
+  }
+
+  .about-avatar {
+    flex-shrink: 0;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 4px solid var(--ink);
+    box-shadow: 4px 5px 0 rgba(43, 43, 43, 0.85);
+    transform: rotate(-2deg);
+    overflow: hidden;
+  }
+
+  .about-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .about-intro h1 {
+    position: relative;
+    display: inline-block;
+    font-size: clamp(1.7rem, 4.5vw, 2.3rem);
+    margin: 0;
+  }
+
+  .squiggle-underline {
+    position: absolute;
+    left: 0;
+    bottom: -10px;
+    width: 100%;
+    height: 12px;
+  }
+
+  .about-tagline {
+    font-family: var(--font-hand);
+    font-size: 1.2rem;
+    margin: 22px 0 0;
+  }
+
+  .about-desc {
+    margin: 12px 0 0;
+    font-size: 1rem;
+    line-height: 1.8;
+    opacity: 0.85;
+  }
+
+  /* ===== 三张卡片 ===== */
+  .about-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 28px;
+    margin-top: 44px;
+  }
+
+  .about-card {
+    padding: 24px 22px;
+  }
+
+  .about-card:hover {
+    transform: translateY(-5px) rotate(-0.8deg);
+    box-shadow: 7px 9px 0 rgba(43, 43, 43, 0.85);
+  }
+
+  .about-card h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.2rem;
+    margin: 0 0 14px;
+  }
+
+  .card-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  .about-card ul {
+    margin: 0;
+    padding-left: 1.4em;
+    line-height: 2;
+    font-size: 0.95rem;
+    opacity: 0.85;
+  }
+
+  .card-link {
+    display: inline-block;
+    margin-top: 14px;
+    font-weight: 800;
+    font-size: 0.95rem;
+    color: var(--accent);
+    text-decoration: none;
+    transition: transform 0.2s ease;
+  }
+
+  .card-link:hover {
+    transform: translateX(4px);
+  }
+
+  /* ===== 公众号卡片 ===== */
+  .about-wechat {
+    text-align: center;
+  }
+
+  .about-wechat h2 {
+    justify-content: center;
+  }
+
+  .wechat-tip {
+    margin: 0 0 14px;
+    font-size: 0.92rem;
+    line-height: 1.7;
+    opacity: 0.8;
+  }
+
+  .wechat-qr {
+    width: 180px;
+    height: auto;
+    border: 2.5px solid var(--ink);
+    border-radius: 12px;
+  }
+
+  @media (max-width: 640px) {
+    .about-hero {
+      flex-direction: column;
+      text-align: center;
+      padding: 30px 22px;
+    }
+  }
+</style>

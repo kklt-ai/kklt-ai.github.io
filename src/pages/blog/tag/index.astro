@@ -1,0 +1,107 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+
+const posts = await getCollection('blog');
+const tagCounts = new Map<string, number>();
+for (const post of posts) {
+  for (const tag of post.data.tags) {
+    tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1);
+  }
+}
+// 按文章数从多到少排列
+const tags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]);
+---
+
+<BaseLayout title="文章标签 · 卡卡罗特AI" description="按标签浏览卡卡罗特AI 的所有文章。">
+  <section class="container tag-index">
+    <a href="/blog/" class="back-link">← 返回全部文章</a>
+
+    <div class="page-head reveal visible">
+      <h1 class="section-title">文章标签</h1>
+      <p>共 {tags.length} 个标签，点击标签查看对应文章</p>
+    </div>
+
+    <div class="tag-cloud">
+      {
+        tags.map(([tag, count], i) => (
+          <a
+            href={`/blog/tag/${encodeURIComponent(tag)}/`}
+            class={`tag-chip sketch-box reveal ${i % 2 === 1 ? 'alt' : ''}`}
+            style={`transition-delay: ${i * 50}ms`}
+          >
+            <span class="tag-name"># {tag}</span>
+            <span class="tag-count">{count} 篇</span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .tag-index {
+    padding-top: 56px;
+  }
+
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 28px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: rgba(43, 43, 43, 0.65);
+    text-decoration: none;
+    transition: color 0.15s ease, transform 0.15s ease;
+  }
+
+  .back-link:hover {
+    color: var(--ink);
+    transform: translateX(-3px);
+  }
+
+  .page-head {
+    margin-bottom: 40px;
+  }
+
+  .page-head p {
+    margin-top: 6px;
+    color: rgba(43, 43, 43, 0.65);
+    font-size: 0.95rem;
+  }
+
+  .tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+  }
+
+  .tag-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 18px;
+    text-decoration: none;
+  }
+
+  .tag-chip:hover {
+    transform: translateY(-4px) rotate(-1deg);
+    box-shadow: 6px 7px 0 rgba(43, 43, 43, 0.85);
+  }
+
+  .tag-name {
+    font-weight: 800;
+    font-size: 1.05rem;
+  }
+
+  .tag-count {
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 2px 10px;
+    background: rgba(255, 214, 90, 0.5);
+    border: 1.5px solid var(--ink);
+    border-radius: 999px;
+    font-variant-numeric: tabular-nums;
+  }
+</style>
