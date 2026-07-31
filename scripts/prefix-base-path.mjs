@@ -12,7 +12,10 @@ if (basePath === '/') {
 
 function prefixUrl(url) {
   if (!url.startsWith('/') || url.startsWith('//')) return url;
-  if (url === basePath || url.startsWith(`${basePath}/`)) return url;
+  // Astro 在 --base 下只会自动为构建产物（/_astro/）加前缀，
+  // 其余根相对 URL 都需要在这里补前缀；不能按 basePath 前缀豁免，
+  // 否则站内 /blog/ 等路由在 basePath 同为 /blog 时会被误判为已加前缀。
+  if (url.startsWith(`${basePath}/_astro/`)) return url;
   return `${basePath}${url}`;
 }
 
