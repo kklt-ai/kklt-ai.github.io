@@ -2,6 +2,8 @@
 
 持续分享有用的 AI 干货教程～
 
+在线访问：<https://kklt-ai.github.io>
+
 <p align="center">
   <img src="public/wechat_qrcode.JPG" alt="卡卡罗特AI 微信公众号" width="200" />
 </p>
