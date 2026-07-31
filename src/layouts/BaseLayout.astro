@@ -28,6 +28,15 @@ const { title, description = '卡卡罗特AI · 持续分享有用的AI干货教
           <a href="/projects/">项目</a>
           <a href="/blog/">文章</a>
           <a href="/about/">关于</a>
+          <a href="https://github.com/kklt-ai" target="_blank" rel="noopener noreferrer" class="nav-github" aria-label="访问 GitHub 主页">
+            <svg viewBox="0 0 24 24" aria-hidden="true" class="nav-github-icon">
+              <path
+                d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.15c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.75 2.69 1.25 3.35.95.1-.74.4-1.25.72-1.53-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11.1 11.1 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.59.23 2.76.11 3.05.74.8 1.19 1.83 1.19 3.09 0 4.42-2.7 5.39-5.26 5.68.41.35.77 1.05.77 2.12v3.14c0 .3.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"
+                fill="currentColor"
+              />
+            </svg>
+            GitHub
+          </a>
         </div>
       </nav>
       <svg class="header-squiggle" viewBox="0 0 1200 12" preserveAspectRatio="none" aria-hidden="true">
@@ -44,6 +53,21 @@ const { title, description = '卡卡罗特AI · 持续分享有用的AI干货教
         <path d="M0 6 Q30 0 60 6 T120 6 T180 6 T240 6 T300 6 T360 6 T420 6 T480 6 T540 6 T600 6 T660 6 T720 6 T780 6 T840 6 T900 6 T960 6 T1020 6 T1080 6 T1140 6 T1200 6" fill="none" stroke="#2b2b2b" stroke-width="2.5" />
       </svg>
       <div class="container footer-inner">
+        <a
+          href="https://github.com/kklt-ai"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="footer-github"
+          aria-label="访问 GitHub 主页"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" class="footer-github-icon">
+            <path
+              d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.15c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.75 2.69 1.25 3.35.95.1-.74.4-1.25.72-1.53-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11.1 11.1 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.59.23 2.76.11 3.05.74.8 1.19 1.83 1.19 3.09 0 4.42-2.7 5.39-5.26 5.68.41.35.77 1.05.77 2.12v3.14c0 .3.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"
+              fill="currentColor"
+            />
+          </svg>
+          GitHub
+        </a>
         <p>© {new Date().getFullYear()} 卡卡罗特AI · 持续分享有用的AI干货教程～</p>
       </div>
     </footer>
@@ -117,6 +141,17 @@ const { title, description = '卡卡罗特AI · 持续分享有用的AI干货教
         right: 0;
       }
 
+      .nav-github {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .nav-github-icon {
+        width: 17px;
+        height: 17px;
+      }
+
       .header-squiggle,
       .footer-squiggle {
         display: block;
@@ -132,6 +167,31 @@ const { title, description = '卡卡罗特AI · 持续分享有用的AI干货教
       .footer-inner {
         padding: 28px 24px 40px;
         opacity: 0.85;
+      }
+
+      .footer-github {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin-bottom: 10px;
+        font-weight: 700;
+        color: var(--ink);
+        text-decoration: none;
+        transition: color 0.15s ease, transform 0.15s ease;
+      }
+
+      .footer-github:hover {
+        color: var(--accent);
+        transform: translateY(-2px);
+      }
+
+      .footer-github-icon {
+        width: 20px;
+        height: 20px;
+      }
+
+      .footer-inner p {
+        margin: 0;
       }
 
       @media (max-width: 560px) {
