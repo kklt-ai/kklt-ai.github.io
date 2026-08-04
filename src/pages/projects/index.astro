@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ShareButton from '../../components/ShareButton.astro';
 import { projects } from '../../data/projects';
 ---
 
@@ -12,6 +13,7 @@ import { projects } from '../../data/projects';
           <path d="M20 4 L24 16 L37 16 L27 24 L31 36 L20 28 L9 36 L13 24 L3 16 L16 16 Z" fill="#ffd65a" stroke="#2b2b2b" stroke-width="2" stroke-linejoin="round" />
         </svg>
       </h1>
+      <ShareButton title="全部 Vibe-Coding 项目 · 卡卡罗特AI" />
     </div>
 
     <div class="project-grid">
@@ -49,6 +51,10 @@ import { projects } from '../../data/projects';
 
   .page-head {
     margin-bottom: 40px;
+  }
+
+  .page-head :global(.share-btn) {
+    margin-top: 10px;
   }
 
   .project-grid {

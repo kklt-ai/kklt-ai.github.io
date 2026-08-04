@@ -1,6 +1,7 @@
 ---
 import type { GetStaticPathsOptions, Page } from 'astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ShareButton from '../../components/ShareButton.astro';
 import { getAllArticles, type Article } from '../../data/articles';
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
@@ -24,7 +25,10 @@ const { page } = Astro.props;
           <path d="M20 4 L24 16 L37 16 L27 24 L31 36 L20 28 L9 36 L13 24 L3 16 L16 16 Z" fill="#a5d8ff" stroke="#2b2b2b" stroke-width="2" stroke-linejoin="round" />
         </svg>
       </h1>
-      <a href="/blog/tag/" class="tags-link">按标签浏览 →</a>
+      <div class="head-actions">
+        <a href="/blog/tag/" class="tags-link">按标签浏览 →</a>
+        <ShareButton title="全部文章 · 卡卡罗特AI" />
+      </div>
     </div>
 
     <div class="article-grid">
@@ -86,12 +90,18 @@ const { page } = Astro.props;
 
   .tags-link {
     display: inline-block;
-    margin-top: 10px;
     font-size: 0.95rem;
     font-weight: 800;
     color: var(--accent);
     text-decoration: none;
     transition: transform 0.2s ease;
+  }
+
+  .head-actions {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-top: 10px;
   }
 
   .tags-link:hover {

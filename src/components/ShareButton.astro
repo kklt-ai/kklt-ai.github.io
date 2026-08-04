@@ -1,0 +1,94 @@
+---
+interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<button type="button" class="share-btn" data-title={title}>
+  <svg viewBox="0 0 24 24" aria-hidden="true" class="share-btn-icon">
+    <circle cx="6" cy="12" r="2.6" fill="none" stroke="currentColor" stroke-width="2" />
+    <circle cx="18" cy="5.5" r="2.6" fill="none" stroke="currentColor" stroke-width="2" />
+    <circle cx="18" cy="18.5" r="2.6" fill="none" stroke="currentColor" stroke-width="2" />
+    <path d="M8.3 10.8 15.7 6.7 M8.3 13.2 15.7 17.3" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+  </svg>
+  <span class="share-btn-text">分享</span>
+</button>
+
+<script>
+  // 复制「标题 + 链接」到剪贴板，成功后短暂提示
+  function copyText(text: string): Promise<void> {
+    if (navigator.clipboard && window.isSecureContext) {
+      return navigator.clipboard.writeText(text);
+    }
+    // 回退：非安全上下文（如 http 局域网调试）下用临时 textarea
+    return new Promise((resolve, reject) => {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy') ? resolve() : reject(new Error('copy failed'));
+      } catch (e) {
+        reject(e);
+      } finally {
+        ta.remove();
+      }
+    });
+  }
+
+  document.querySelectorAll<HTMLButtonElement>('.share-btn').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const textEl = btn.querySelector('.share-btn-text');
+      if (!textEl) return;
+      const original = textEl.textContent;
+      try {
+        await copyText(`${btn.dataset.title}\n${window.location.href}`);
+        textEl.textContent = '已复制链接 ✓';
+      } catch {
+        textEl.textContent = '复制失败';
+      }
+      setTimeout(() => {
+        textEl.textContent = original;
+      }, 1600);
+    });
+  });
+</script>
+
+<style>
+  .share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    font-family: var(--font-apple);
+    color: var(--ink);
+    padding: 3px 14px;
+    border: 2px solid var(--ink);
+    border-radius: var(--squiggle-2);
+    background: var(--highlight);
+    cursor: pointer;
+    transform: rotate(-1deg);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .share-btn:hover {
+    transform: rotate(0deg) translateY(-2px);
+    box-shadow: 3px 4px 0 rgba(43, 43, 43, 0.85);
+  }
+
+  .share-btn:active {
+    transform: translate(1px, 1px);
+    box-shadow: none;
+  }
+
+  .share-btn-icon {
+    width: 15px;
+    height: 15px;
+    color: var(--accent);
+  }
+</style>

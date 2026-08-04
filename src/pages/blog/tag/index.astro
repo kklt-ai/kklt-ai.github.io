@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ShareButton from '../../../components/ShareButton.astro';
 
 const posts = await getCollection('blog');
 const tagCounts = new Map<string, number>();
@@ -20,6 +21,7 @@ const tags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]);
     <div class="page-head reveal visible">
       <h1 class="section-title">文章标签</h1>
       <p>共 {tags.length} 个标签，点击标签查看对应文章</p>
+      <ShareButton title="文章标签 · 卡卡罗特AI" />
     </div>
 
     <div class="tag-cloud">
@@ -69,6 +71,10 @@ const tags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]);
     margin-top: 6px;
     color: rgba(43, 43, 43, 0.65);
     font-size: 0.95rem;
+  }
+
+  .page-head :global(.share-btn) {
+    margin-top: 12px;
   }
 
   .tag-cloud {

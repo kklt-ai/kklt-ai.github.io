@@ -1,6 +1,7 @@
 ---
 import { getCollection, type CollectionEntry } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ShareButton from '../../../components/ShareButton.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog');
@@ -35,6 +36,7 @@ const { tag, posts } = Astro.props;
     <div class="page-head reveal visible">
       <h1 class="section-title"># {tag}</h1>
       <p>共 {posts.length} 篇文章</p>
+      <ShareButton title={`#${tag} 标签文章 · 卡卡罗特AI`} />
     </div>
 
     <div class="article-grid">
@@ -97,6 +99,10 @@ const { tag, posts } = Astro.props;
     margin-top: 6px;
     color: rgba(43, 43, 43, 0.65);
     font-size: 0.95rem;
+  }
+
+  .page-head :global(.share-btn) {
+    margin-top: 12px;
   }
 
   .article-grid {
