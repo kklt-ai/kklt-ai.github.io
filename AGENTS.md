@@ -93,6 +93,7 @@ node scripts/fetch-wechat-articles.mjs
 ## 内容与资源约定
 
 - Markdown frontmatter 必须符合 `src/content.config.ts`：`title`、`description`、`pubDate` 必填，`tags` 默认为空数组，`cover` 可选。
+- 文章置顶：站内文章在 frontmatter 中设置 `pinned: true`（默认 `false`），公众号文章在 `src/data/wechat-articles.ts` 对应条目设置 `pinned: true`。置顶文章排在列表最前（置顶之间仍按日期倒序），卡片显示「置顶」徽章；支持多篇同时置顶。
 - 文章文件名即 URL slug；改名会改变公开链接，未经明确要求不要修改。
 - 日期统一使用 `YYYY-MM-DD`，以保证字符串排序与展示结果一致。
 - 公众号封面放在 `public/covers/`，引用路径写成 `/covers/<文件名>`。

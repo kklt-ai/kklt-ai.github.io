@@ -48,7 +48,10 @@ const { page } = Astro.props;
             )}
             <div class="article-body">
               <div class="article-meta">
-                <span class={`badge ${a.source === '公众号' ? 'green' : 'blue'}`}>{a.source}</span>
+                <span class="meta-badges">
+                  {a.pinned && <span class="badge orange">置顶</span>}
+                  <span class={`badge ${a.source === '公众号' ? 'green' : 'blue'}`}>{a.source}</span>
+                </span>
                 <time>{a.date}</time>
               </div>
               <h3>{a.title}</h3>
@@ -160,6 +163,11 @@ const { page } = Astro.props;
     margin-bottom: 10px;
     font-size: 0.85rem;
     opacity: 0.9;
+  }
+
+  .meta-badges {
+    display: flex;
+    gap: 6px;
   }
 
   .article-body h3 {

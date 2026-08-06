@@ -2,6 +2,7 @@
 title: "ChatGPT取消5小时限额，Codex终于可以疯狂造起来了！"
 description: "OpenAI 暂时取消 Plus、Business、Pro 套餐的 5 小时使用限制，Codex 随便用。同时梳理近期 AI 模型大乱斗：Fable 5、Grok 4.5、Gemini 3.5 Pro。"
 pubDate: 2026-07-13
+pinned: true
 tags: ["AI", "Codex", "OpenAI"]
 cover: /blog/chatgpt-codex-limit-removed/cover.jpeg
 wechatUrl: https://mp.weixin.qq.com/s/IxPOk1hD6_RqEA5M5WjZqQ

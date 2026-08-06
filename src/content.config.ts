@@ -9,6 +9,7 @@ const blog = defineCollection({
     pubDate: z.coerce.date(),
     tags: z.array(z.string()).default([]),
     cover: z.string().optional(),
+    pinned: z.boolean().default(false),
     wechatUrl: z.string().url().optional(),
   }),
 });
