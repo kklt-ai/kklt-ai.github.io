@@ -46,6 +46,7 @@ const ogImageUrl = new URL(ogImagePath, Astro.site);
           <a href="/blog/">文章</a>
           <a href="/videos/">视频</a>
           <a href="/about/">关于</a>
+          <a href="https://pay.ldxp.cn/shop/6688" target="_blank" rel="noopener noreferrer" class="nav-topup">GPT代充</a>
           <a href="https://github.com/kklt-ai" target="_blank" rel="noopener noreferrer" class="nav-github" aria-label="访问 GitHub 主页">
             <svg viewBox="0 0 24 24" aria-hidden="true" class="nav-github-icon">
               <path
@@ -163,6 +164,11 @@ const ogImageUrl = new URL(ogImagePath, Astro.site);
         display: inline-flex;
         align-items: center;
         gap: 5px;
+      }
+
+      /* 代充推广入口：用主题色突出提醒 */
+      .nav-topup {
+        color: var(--accent);
       }
 
       .nav-github-icon {

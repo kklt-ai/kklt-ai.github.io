@@ -59,6 +59,27 @@ const projectIcons: Record<string, string> = {
             />
           </div>
         </div>
+        <div class="wechat-follow">
+          <button
+            type="button"
+            class="sketch-btn wechat-trigger"
+            aria-expanded="false"
+            aria-controls="my-wechat-qr-popover"
+          >
+            加我微信 💬
+          </button>
+          <div id="my-wechat-qr-popover" class="wechat-popover sketch-box" role="tooltip">
+            <span class="wechat-tape" aria-hidden="true" />
+            <img
+              src="/my-wechat-qrcode.JPG"
+              alt="悟空AI 个人微信二维码"
+              width="200"
+              height="255"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        </div>
       </div>
     </div>
 
@@ -692,11 +713,12 @@ const projectIcons: Record<string, string> = {
 </style>
 
 <script>
-  const follow = document.querySelector('.wechat-follow');
-  const trigger = follow?.querySelector('.wechat-trigger');
+  const follows = document.querySelectorAll('.wechat-follow');
+  const canHover = () => window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-  if (follow && trigger instanceof HTMLButtonElement) {
-    const canHover = () => window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  follows.forEach((follow) => {
+    const trigger = follow.querySelector('.wechat-trigger');
+    if (!(trigger instanceof HTMLButtonElement)) return;
 
     trigger.addEventListener('click', (event) => {
       if (canHover()) return;
@@ -704,17 +726,21 @@ const projectIcons: Record<string, string> = {
       const open = follow.classList.toggle('is-open');
       trigger.setAttribute('aria-expanded', String(open));
     });
+  });
 
-    document.addEventListener('click', (event) => {
-      if (!(event.target instanceof Node) || follow.contains(event.target)) return;
+  document.addEventListener('click', (event) => {
+    follows.forEach((follow) => {
+      if (event.target instanceof Node && follow.contains(event.target)) return;
       follow.classList.remove('is-open');
-      trigger.setAttribute('aria-expanded', 'false');
+      follow.querySelector('.wechat-trigger')?.setAttribute('aria-expanded', 'false');
     });
+  });
 
-    document.addEventListener('keydown', (event) => {
-      if (event.key !== 'Escape') return;
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    follows.forEach((follow) => {
       follow.classList.remove('is-open');
-      trigger.setAttribute('aria-expanded', 'false');
+      follow.querySelector('.wechat-trigger')?.setAttribute('aria-expanded', 'false');
     });
-  }
+  });
 </script>
