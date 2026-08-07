@@ -27,6 +27,14 @@ node scripts/fetch-wechat-articles.mjs
 
 该脚本会覆盖 `src/data/wechat-articles.ts` 并更新 `public/covers/` 中的封面，运行后必须检查差异。
 
+新增或刷新 B 站视频时运行（参数为视频链接或 BV 号，可多个）：
+
+```bash
+node scripts/fetch-bilibili-videos.mjs <视频链接或BV号> [...更多]
+```
+
+该脚本会覆盖 `src/data/videos.ts` 并更新 `public/covers/` 中的 `bili-` 前缀封面，运行后必须检查差异。
+
 ## 目录职责
 
 - `src/pages/`：Astro 文件路由。首页、项目页、文章列表和详情页均在此维护。
@@ -36,6 +44,7 @@ node scripts/fetch-wechat-articles.mjs
 - `src/content.config.ts`：Markdown frontmatter schema。
 - `src/data/projects.ts`：项目数据和首页精选逻辑。
 - `src/data/wechat-articles.ts`：公众号文章元数据。
+- `src/data/videos.ts`：B 站视频元数据和首页最新视频逻辑，对应 `/videos/` 栏目页。
 - `src/data/articles.ts`：两类文章的统一模型、合并和排序逻辑。
 - `src/assets/`：通过 Astro import 并参与构建优化的资源。
 - `public/`：按原路径公开的静态资源。

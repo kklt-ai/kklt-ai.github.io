@@ -1,0 +1,168 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ShareButton from '../../components/ShareButton.astro';
+import { videos } from '../../data/videos';
+---
+
+<BaseLayout title="视频教程 · 卡卡罗特AI" description="卡卡罗特AI 的 B 站视频教程合集">
+  <section class="container videos-index">
+    <div class="page-head reveal visible">
+      <h1 class="section-title">
+        视频教程
+        <svg class="doodle-star" viewBox="0 0 40 40" aria-hidden="true">
+          <path d="M20 4 L24 16 L37 16 L27 24 L31 36 L20 28 L9 36 L13 24 L3 16 L16 16 Z" fill="#a5d8ff" stroke="#2b2b2b" stroke-width="2" stroke-linejoin="round" />
+        </svg>
+      </h1>
+      <ShareButton title="视频教程 · 卡卡罗特AI" />
+    </div>
+
+    <div class="video-grid">
+      {
+        videos.map((v, i) => (
+          <a
+            href={v.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class={`video-card sketch-box reveal ${i % 2 === 1 ? 'alt' : ''}`}
+            style={`transition-delay: ${i * 70}ms`}
+          >
+            <div class="video-cover">
+              <img src={v.cover} alt={v.title} loading="lazy" />
+              <span class="play-badge" aria-hidden="true">▶</span>
+            </div>
+            <div class="video-body">
+              <time>{v.date}</time>
+              <h3>{v.title}</h3>
+              <p class="video-desc">{v.description}</p>
+              <div class="video-foot">
+                <span class="badge pink">B站</span>
+                <span class="go-arrow" aria-hidden="true">→</span>
+              </div>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .videos-index {
+    padding-top: 56px;
+    padding-bottom: 40px;
+  }
+
+  .page-head {
+    margin-bottom: 40px;
+  }
+
+  .page-head :global(.share-btn) {
+    margin-top: 10px;
+  }
+
+  .video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 28px;
+  }
+
+  .video-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    overflow: hidden;
+  }
+
+  .video-card:hover {
+    transform: translateY(-6px) rotate(-1deg);
+    box-shadow: 7px 9px 0 rgba(43, 43, 43, 0.85);
+  }
+
+  .video-card:nth-child(even):hover {
+    transform: translateY(-6px) rotate(1deg);
+  }
+
+  .video-cover {
+    position: relative;
+    border-bottom: 2.5px solid var(--ink);
+    overflow: hidden;
+  }
+
+  .video-cover img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+  }
+
+  .video-card:hover .video-cover img {
+    transform: scale(1.05);
+  }
+
+  .play-badge {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    background: rgba(255, 214, 90, 0.92);
+    border: 2px solid var(--ink);
+    border-radius: 50%;
+    font-size: 0.95rem;
+    transition: transform 0.2s ease;
+  }
+
+  .video-card:hover .play-badge {
+    transform: scale(1.15) rotate(-8deg);
+  }
+
+  .video-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 16px 18px 18px;
+  }
+
+  .video-body time {
+    font-size: 0.85rem;
+    opacity: 0.7;
+  }
+
+  .video-body h3 {
+    font-size: 1.1rem;
+    margin-top: 6px;
+    margin-bottom: 8px;
+    line-height: 1.45;
+  }
+
+  .video-desc {
+    font-size: 0.92rem;
+    opacity: 0.8;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .video-foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 14px;
+  }
+
+  .go-arrow {
+    font-size: 1.3rem;
+    font-weight: 900;
+    transition: transform 0.2s ease;
+  }
+
+  .video-card:hover .go-arrow {
+    transform: translateX(6px);
+    color: var(--accent);
+  }
+</style>
