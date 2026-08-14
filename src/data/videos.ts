@@ -11,6 +11,14 @@ export interface Video {
 // 运行 node scripts/fetch-bilibili-videos.mjs <视频链接或BV号> 可自动抓取标题/简介/封面/时间
 export const videos: Video[] = [
   {
+    bvid: 'BV1Z4gP6iEKc',
+    title: 'AI总乱改代码？一个规则文件帮你搞定！99%的人都没有设置！附万能模板！',
+    description: '🤔你的Claude Code、Codex、CodeBuddy 写代码总是乱改、忘记项目规范、反复犯错？ 问题可能不是 AI 不够聪明，而是缺少项目规则文件。而99%的人都没有设置这个文件。 ✅这个视频教你用 AGENTS.md、CLAUD…',
+    cover: '/covers/bili-BV1Z4gP6iEKc.jpg',
+    url: 'https://www.bilibili.com/video/BV1Z4gP6iEKc/',
+    date: '2026-08-14',
+  },
+  {
     bvid: 'BV1VtMk6YEcJ',
     title: 'GitHub零基础-5分钟保姆级使用教程！',
     description: '这是全网最快入门GitHub的零基础教程了，5分钟跟你讲讲GitHub的核心功能。 ✅不会 Git、不会代码也能看懂。 ✅这期带你学会： 1、怎么找到自己需要的开源项目？怎么借助AI快速了找到需要的项目？ 2、怎么看 README文件，怎么…',
