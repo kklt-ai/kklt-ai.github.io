@@ -33,7 +33,7 @@ const groups = getToolsByCategory();
                 style={`transition-delay: ${i * 70}ms`}
               >
                 <span class="tape" aria-hidden="true" />
-                <div class="tool-emoji">{site.emoji}</div>
+                <div class="tool-emoji" set:html={site.icon ?? site.emoji} />
                 <h3>{site.name}</h3>
                 <p class="tool-desc">{site.description}</p>
                 <div class="tool-foot">
@@ -116,6 +116,12 @@ const groups = getToolsByCategory();
     line-height: 1;
     margin-bottom: 12px;
     transition: transform 0.25s ease;
+  }
+
+  .tool-emoji svg {
+    width: 2.6rem;
+    height: 2.6rem;
+    display: block;
   }
 
   .tool-card:hover .tool-emoji {

@@ -23,7 +23,7 @@ const { site } = Astro.props;
     <div class="detail-box sketch-box reveal visible">
       <span class="tape" aria-hidden="true" />
       <div class="detail-head">
-        <div class="detail-emoji">{site.emoji}</div>
+        <div class="detail-emoji" set:html={site.icon ?? site.emoji} />
         <div class="detail-title">
           <h1>{site.name}</h1>
           <span class={`badge ${site.color}`}>{site.category}</span>
@@ -104,6 +104,11 @@ const { site } = Astro.props;
     border: 2.5px solid var(--ink);
     border-radius: var(--squiggle);
     animation: float 4s ease-in-out infinite;
+  }
+
+  .detail-emoji svg {
+    width: 2.8rem;
+    height: 2.8rem;
   }
 
   .detail-title h1 {

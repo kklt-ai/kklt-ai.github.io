@@ -6,6 +6,8 @@ export interface NavSite {
   description: string;
   url: string;
   emoji: string;
+  /** 手绘风 SVG 图标，优先于 emoji 展示 */
+  icon?: string;
   /** 功能分类，列表页按分类分组展示 */
   category: string;
   color: 'green' | 'orange' | 'blue' | 'pink';
@@ -24,6 +26,7 @@ export const tools: NavSite[] = [
     description: 'QQ 浏览器出品的在线工具箱，上百种免费小工具即开即用。',
     url: 'https://tool.browser.qq.com/',
     emoji: '🧰',
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="#2b2b2b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 9 Q3.4 7.8 4.6 7.8 H19.4 Q20.6 7.8 20.5 9 V18.6 Q20.6 19.8 19.4 19.8 H4.6 Q3.4 19.8 3.5 18.6 Z" fill="#fff"/><path d="M9 7.8 V6 Q9 4.6 10.2 4.6 H13.8 Q15 4.6 15 6 V7.8"/><path d="M3.5 12.6 Q7.6 14.6 12 14.6 T20.5 12.6"/><rect x="10.3" y="12.3" width="3.4" height="3.2" rx="0.9" fill="#ffd65a"/></svg>`,
     category: '效率工具',
     color: 'green',
     detail:
@@ -42,6 +45,7 @@ export const tools: NavSite[] = [
     description: '在线截图美化工具，让普通截图秒变高级产品图。',
     url: 'https://www.photor.fun/editor',
     emoji: '📸',
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="#2b2b2b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.2" y="5" width="17.6" height="14.4" rx="2.2" fill="#fff"/><circle cx="8.6" cy="9.6" r="1.7" fill="#ffd65a"/><path d="M4.4 17.4 L9.8 11.8 L13.2 15.2 L16.4 12 L20.4 17.4"/><path d="M17.6 1.8 L18 3 L19.2 3.4 L18 3.8 L17.6 5 L17.2 3.8 L16 3.4 L17.2 3 Z" fill="#ff6b35" stroke-width="1.2"/></svg>`,
     category: '图片处理',
     color: 'orange',
     detail:
@@ -60,6 +64,7 @@ export const tools: NavSite[] = [
     description: '免费开源的在线白板与笔记工具，数据存在本地不上云。',
     url: 'https://revezone.com/index.html',
     emoji: '🎨',
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="#2b2b2b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.2" y="3.6" width="17.6" height="12.6" rx="2" fill="#fff"/><path d="M6.8 12.4 Q8.6 7.6 10.4 10.8 T14 9.6"/><path d="M17.4 6.6 V9.6 M15.9 8.1 H18.9"/><path d="M9.6 16.2 L8.2 20.4 M14.4 16.2 L15.8 20.4"/></svg>`,
     category: '效率工具',
     color: 'blue',
     detail:
