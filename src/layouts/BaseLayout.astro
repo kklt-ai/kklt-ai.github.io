@@ -38,25 +38,34 @@ const ogImageUrl = new URL(ogImagePath, Astro.site);
   <body>
     <header class="site-header">
       <nav class="container nav-inner">
-        <a href="/" class="logo" aria-label="回到首页">
-          <span>卡卡罗特AI</span>
-        </a>
+        <div class="nav-top">
+          <a href="/" class="logo" aria-label="回到首页">
+            <span>卡卡罗特AI</span>
+          </a>
+          <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-more" aria-label="打开更多菜单">
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
         <div class="nav-links">
           <a href="/projects/">项目</a>
           <a href="/blog/">文章</a>
           <a href="/videos/">视频</a>
           <a href="/tools/">工具</a>
-          <a href="/about/">关于我</a>
-          <a href="https://pay.ldxp.cn/shop/6688" target="_blank" rel="noopener noreferrer" class="nav-topup">GPT代充</a>
-          <a href="https://github.com/kklt-ai" target="_blank" rel="noopener noreferrer" class="nav-github" aria-label="访问 GitHub 主页">
-            <svg viewBox="0 0 24 24" aria-hidden="true" class="nav-github-icon">
-              <path
-                d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.15c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.75 2.69 1.25 3.35.95.1-.74.4-1.25.72-1.53-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11.1 11.1 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.59.23 2.76.11 3.05.74.8 1.19 1.83 1.19 3.09 0 4.42-2.7 5.39-5.26 5.68.41.35.77 1.05.77 2.12v3.14c0 .3.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"
-                fill="currentColor"
-              />
-            </svg>
-            GitHub
-          </a>
+          <div class="nav-more" id="nav-more">
+            <a href="/about/">关于我</a>
+            <a href="https://pay.ldxp.cn/shop/6688" target="_blank" rel="noopener noreferrer" class="nav-topup">GPT代充</a>
+            <a href="https://github.com/kklt-ai" target="_blank" rel="noopener noreferrer" class="nav-github" aria-label="访问 GitHub 主页">
+              <svg viewBox="0 0 24 24" aria-hidden="true" class="nav-github-icon">
+                <path
+                  d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.15c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.75 2.69 1.25 3.35.95.1-.74.4-1.25.72-1.53-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.09-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11.1 11.1 0 0 1 5.78 0c2.2-1.49 3.17-1.18 3.17-1.18.62 1.59.23 2.76.11 3.05.74.8 1.19 1.83 1.19 3.09 0 4.42-2.7 5.39-5.26 5.68.41.35.77 1.05.77 2.12v3.14c0 .3.21.67.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z"
+                  fill="currentColor"
+                />
+              </svg>
+              GitHub
+            </a>
+          </div>
         </div>
       </nav>
       <svg class="header-squiggle" viewBox="0 0 1200 12" preserveAspectRatio="none" aria-hidden="true">
@@ -93,6 +102,29 @@ const ogImageUrl = new URL(ogImagePath, Astro.site);
     </footer>
 
     <script>
+      // 移动端汉堡菜单：展开/收起「更多」面板
+      const navToggle = document.querySelector('.nav-toggle');
+      const navMore = document.querySelector('.nav-more');
+      if (navToggle && navMore) {
+        const setOpen = (open) => {
+          navMore.classList.toggle('open', open);
+          navToggle.setAttribute('aria-expanded', String(open));
+          navToggle.setAttribute('aria-label', open ? '收起菜单' : '打开更多菜单');
+        };
+        navToggle.addEventListener('click', () => {
+          setOpen(!navMore.classList.contains('open'));
+        });
+        navMore.querySelectorAll('a').forEach((link) => {
+          link.addEventListener('click', () => setOpen(false));
+        });
+        document.addEventListener('click', (event) => {
+          if (!navMore.classList.contains('open')) return;
+          if (event.target instanceof Node && !event.target.closest('.nav-inner')) {
+            setOpen(false);
+          }
+        });
+      }
+
       // 滚动渐入动画
       const observer = new IntersectionObserver(
         (entries) => {
@@ -124,12 +156,58 @@ const ogImageUrl = new URL(ogImagePath, Astro.site);
         padding-bottom: 10px;
       }
 
+      .nav-top {
+        display: contents;
+      }
+
       .logo {
         display: flex;
         align-items: center;
         font-size: 1.35rem;
         font-weight: 900;
         text-decoration: none;
+      }
+
+      /* 汉堡按钮：仅移动端显示 */
+      .nav-toggle {
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+        width: 40px;
+        height: 38px;
+        background: var(--card-bg);
+        border: 2.5px solid var(--ink);
+        border-radius: 10px;
+        box-shadow: 2px 3px 0 rgba(43, 43, 43, 0.85);
+        cursor: pointer;
+      }
+
+      .nav-toggle span {
+        display: block;
+        width: 18px;
+        height: 2.5px;
+        background: var(--ink);
+        border-radius: 2px;
+        transition: transform 0.2s ease, opacity 0.2s ease;
+      }
+
+      .nav-toggle[aria-expanded='true'] span:nth-child(1) {
+        transform: translateY(7.5px) rotate(45deg);
+      }
+
+      .nav-toggle[aria-expanded='true'] span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .nav-toggle[aria-expanded='true'] span:nth-child(3) {
+        transform: translateY(-7.5px) rotate(-45deg);
+      }
+
+      /* 桌面端：「更多」分组直接平铺进导航行 */
+      .nav-more {
+        display: contents;
       }
 
       .nav-links {
@@ -219,10 +297,54 @@ const ogImageUrl = new URL(ogImagePath, Astro.site);
         margin: 0;
       }
 
-      @media (max-width: 560px) {
+      @media (max-width: 640px) {
+        .nav-inner {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 10px;
+          padding-bottom: 12px;
+        }
+
+        .nav-top {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .nav-toggle {
+          display: inline-flex;
+        }
+
+        /* 核心栏目：4 项均分一整行 */
         .nav-links {
-          gap: 14px;
-          font-size: 0.95rem;
+          justify-content: space-between;
+          flex-wrap: wrap;
+          gap: 8px 0;
+        }
+
+        /* 「更多」下拉面板：默认收起，独占一行 */
+        .nav-more {
+          display: none;
+          flex-basis: 100%;
+          flex-direction: column;
+          margin-top: 6px;
+          padding: 6px 0;
+          background: var(--card-bg);
+          border: 2.5px solid var(--ink);
+          border-radius: var(--squiggle);
+          box-shadow: 4px 5px 0 rgba(43, 43, 43, 0.85);
+        }
+
+        .nav-more.open {
+          display: flex;
+        }
+
+        .nav-more a {
+          padding: 11px 18px;
+        }
+
+        .nav-more a + a {
+          border-top: 2px dashed rgba(43, 43, 43, 0.25);
         }
       }
     </style>
