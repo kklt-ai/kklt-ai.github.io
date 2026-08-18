@@ -2,6 +2,7 @@
 title: "GitHub怎么用？零基础，保姆级使用教程-上！建议收藏"
 description: "GitHub 零基础保姆级上篇：搜索项目、读懂 README、下载源码与 Release、Trending 热榜和账号注册。"
 pubDate: 2026-08-04
+pinned: true
 tags: ["GitHub", "教程", "AI"]
 cover: /blog/github-beginner-tutorial-part1/cover.jpeg
 wechatUrl: https://mp.weixin.qq.com/s/gl-9aPt7hW721NR4TtnWKw

@@ -11,6 +11,14 @@ export interface Video {
 // 运行 node scripts/fetch-bilibili-videos.mjs <视频链接或BV号> 可自动抓取标题/简介/封面/时间
 export const videos: Video[] = [
   {
+    bvid: 'BV1DPbv6tEdd',
+    title: 'Codex支持1M上下文了 ！保姆级教程！',
+    description: 'Codex 隐藏设置！GPT-5.6 上下文从 258K 提升到 1M！ Codex 1M 上下文隐藏开关！两步搞定。 GPT-5.6 Sol 默认只有 235K，改配置文件直接解锁 100 万 Token。 Mac/Win 打开 ~/.c…',
+    cover: '/covers/bili-BV1DPbv6tEdd.jpg',
+    url: 'https://www.bilibili.com/video/BV1DPbv6tEdd/',
+    date: '2026-08-17',
+  },
+  {
     bvid: 'BV1Z4gP6iEKc',
     title: 'AI总乱改代码？一个规则文件帮你搞定！99%的人都没有设置！附万能模板！',
     description: '🤔你的Claude Code、Codex、CodeBuddy 写代码总是乱改、忘记项目规范、反复犯错？ 问题可能不是 AI 不够聪明，而是缺少项目规则文件。而99%的人都没有设置这个文件。 ✅这个视频教你用 AGENTS.md、CLAUD…',
