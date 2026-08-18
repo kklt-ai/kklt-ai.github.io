@@ -1,0 +1,187 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { tools, type NavSite } from '../../data/tools';
+
+export function getStaticPaths() {
+  return tools.map((site) => ({
+    params: { slug: site.slug },
+    props: { site },
+  }));
+}
+
+interface Props {
+  site: NavSite;
+}
+
+const { site } = Astro.props;
+---
+
+<BaseLayout title={`${site.name} · 工具导航 · 卡卡罗特AI`} description={site.description}>
+  <section class="container tool-detail">
+    <a href="/tools/" class="back-link">← 返回工具导航</a>
+
+    <div class="detail-box sketch-box reveal visible">
+      <span class="tape" aria-hidden="true" />
+      <div class="detail-head">
+        <div class="detail-emoji">{site.emoji}</div>
+        <div class="detail-title">
+          <h1>{site.name}</h1>
+          <span class={`badge ${site.color}`}>{site.category}</span>
+        </div>
+      </div>
+
+      <p class="detail-text">{site.detail}</p>
+
+      <h2 class="feature-title">
+        <span class="marker">亮点功能</span>
+      </h2>
+      <ul class="feature-list">
+        {site.features.map((f) => <li>{f}</li>)}
+      </ul>
+
+      <div class="visit-row">
+        <a href={site.url} target="_blank" rel="noopener noreferrer" class="sketch-btn primary visit-btn">
+          访问网站 →
+        </a>
+        <span class="visit-url">{site.url}</span>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .tool-detail {
+    padding-top: 48px;
+    padding-bottom: 40px;
+    max-width: 780px;
+  }
+
+  .back-link {
+    display: inline-block;
+    font-family: var(--font-hand);
+    font-weight: 700;
+    text-decoration: none;
+    margin-bottom: 26px;
+    transition: transform 0.15s ease, color 0.15s ease;
+  }
+
+  .back-link:hover {
+    color: var(--accent);
+    transform: translateX(-4px);
+  }
+
+  .detail-box {
+    position: relative;
+    padding: 44px 40px 40px;
+  }
+
+  .tape {
+    position: absolute;
+    top: -14px;
+    left: 50%;
+    width: 110px;
+    height: 28px;
+    transform: translateX(-50%) rotate(-3deg);
+    background: rgba(255, 214, 90, 0.75);
+    border: 1.5px dashed rgba(43, 43, 43, 0.4);
+  }
+
+  .detail-head {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 22px;
+  }
+
+  .detail-emoji {
+    display: grid;
+    place-items: center;
+    width: 84px;
+    height: 84px;
+    flex-shrink: 0;
+    font-size: 2.6rem;
+    background: var(--highlight);
+    border: 2.5px solid var(--ink);
+    border-radius: var(--squiggle);
+    animation: float 4s ease-in-out infinite;
+  }
+
+  .detail-title h1 {
+    font-size: 1.9rem;
+    font-weight: 900;
+    margin-bottom: 8px;
+  }
+
+  .detail-text {
+    opacity: 0.9;
+    margin-bottom: 30px;
+  }
+
+  .feature-title {
+    font-size: 1.25rem;
+    font-weight: 900;
+    margin-bottom: 16px;
+  }
+
+  .feature-list {
+    list-style: none;
+    margin-bottom: 34px;
+  }
+
+  .feature-list li {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 10px;
+    font-size: 0.98rem;
+  }
+
+  .feature-list li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-weight: 900;
+    color: var(--accent-2);
+  }
+
+  .visit-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    border-top: 2px dashed rgba(43, 43, 43, 0.25);
+    padding-top: 26px;
+  }
+
+  .visit-btn {
+    font-family: var(--font-hand);
+    font-size: 1.15rem;
+    padding: 10px 30px;
+  }
+
+  .visit-url {
+    font-size: 0.85rem;
+    opacity: 0.6;
+    word-break: break-all;
+  }
+
+  @media (max-width: 560px) {
+    .detail-box {
+      padding: 34px 22px 28px;
+    }
+
+    .detail-head {
+      gap: 14px;
+    }
+
+    .detail-emoji {
+      width: 64px;
+      height: 64px;
+      font-size: 2rem;
+    }
+
+    .detail-title h1 {
+      font-size: 1.5rem;
+    }
+  }
+</style>
