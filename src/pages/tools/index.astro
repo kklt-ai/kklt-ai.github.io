@@ -2,12 +2,40 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ShareButton from '../../components/ShareButton.astro';
 import { getToolsByCategory } from '../../data/tools';
+import { projects } from '../../data/projects';
 
-const groups = getToolsByCategory();
-const allTools = groups.flatMap((group) => group.sites);
+const toolGroups = getToolsByCategory();
+const catalogItems = [
+  ...toolGroups.flatMap((group) => group.sites).map((site) => ({
+    name: site.name,
+    description: site.description,
+    href: `/tools/${site.slug}/`,
+    icon: site.icon ?? site.emoji,
+    category: site.category,
+    color: site.color,
+    external: false,
+    featured: false,
+    needVpn: false,
+  })),
+  ...projects.map((project) => ({
+    name: project.name,
+    description: project.description,
+    href: project.url,
+    icon: project.icon ?? project.emoji,
+    category: project.tag === '图片工具' ? '图片处理' : project.tag,
+    color: project.color,
+    external: true,
+    featured: project.featured ?? false,
+    needVpn: project.needVpn ?? false,
+  })),
+];
+const groups = [...new Set(catalogItems.map((item) => item.category))].map((category) => ({
+  category,
+  count: catalogItems.filter((item) => item.category === category).length,
+}));
 ---
 
-<BaseLayout title="工具导航 · 卡卡罗特AI" description="卡卡罗特AI 私藏的宝藏网站导航，按功能分类，个个都是效率神器">
+<BaseLayout title="常用工具 · 卡卡罗特AI" description="卡卡罗特AI 收集的实用网站与 Vibe-Coding 工具，按功能分类整理">
   <section class="container tools-index">
     <div class="tools-layout">
       <aside class="tool-sidebar" aria-label="工具分类">
@@ -35,7 +63,7 @@ const allTools = groups.flatMap((group) => group.sites);
               <rect x="14" y="14" width="7" height="7" rx="2"></rect>
             </svg>
             <span>全部</span>
-            <span class="category-count">{allTools.length}</span>
+            <span class="category-count">{catalogItems.length}</span>
           </button>
 
           {
@@ -58,7 +86,7 @@ const allTools = groups.flatMap((group) => group.sites);
                   </svg>
                 )}
                 <span>{group.category}</span>
-                <span class="category-count">{group.sites.length}</span>
+                <span class="category-count">{group.count}</span>
               </button>
             ))
           }
@@ -68,38 +96,42 @@ const allTools = groups.flatMap((group) => group.sites);
       <div class="tools-content">
         <div class="page-head reveal visible">
           <h1 class="section-title">
-            工具导航
+            常用工具
             <svg class="doodle-star" viewBox="0 0 40 40" aria-hidden="true">
               <path d="M20 4 L24 16 L37 16 L27 24 L31 36 L20 28 L9 36 L13 24 L3 16 L16 16 Z" fill="#dcedc8" stroke="#2b2b2b" stroke-width="2" stroke-linejoin="round"></path>
             </svg>
           </h1>
-          <p class="page-desc">私藏的宝藏网站，按功能分类整理，个个都是效率神器 ✨</p>
-          <ShareButton title="工具导航 · 卡卡罗特AI" />
+          <p class="page-desc">实用网站与自己做的小工具，按功能分类整理 ✨</p>
+          <ShareButton title="常用工具 · 卡卡罗特AI" />
         </div>
 
         <div class="results-head">
-          <h2 id="tool-results-title">全部工具</h2>
-          <span class="results-count" aria-live="polite">共 {allTools.length} 个</span>
+          <h2 id="tool-results-title">全部常用工具</h2>
+          <span class="results-count" aria-live="polite">共 {catalogItems.length} 个</span>
         </div>
 
         <div class="tool-grid" aria-labelledby="tool-results-title">
           {
-            allTools.map((site, i) => (
+            catalogItems.map((item, i) => (
               <a
-                href={`/tools/${site.slug}/`}
+                href={item.href}
+                target={item.external ? '_blank' : undefined}
+                rel={item.external ? 'noopener noreferrer' : undefined}
                 class={`tool-card sketch-box reveal ${i % 2 === 1 ? 'alt' : ''}`}
                 style={`transition-delay: ${i * 70}ms`}
-                data-tool-category={site.category}
+                data-tool-category={item.category}
               >
-                <div class={`tool-emoji ${site.color}`} set:html={site.icon ?? site.emoji} />
+                <div class={`tool-emoji ${item.color}`} set:html={item.icon} />
                 <div class="tool-copy">
                   <div class="tool-title-row">
-                    <h3>{site.name}</h3>
-                    <span class={`category-chip ${site.color}`}>{site.category}</span>
+                    <h3>{item.name}</h3>
+                    <span class={`category-chip ${item.color}`}>{item.category}</span>
+                    {item.featured && <span class="status-chip featured">精选</span>}
+                    {item.needVpn && <span class="status-chip vpn">需要魔法</span>}
                   </div>
-                  <p class="tool-desc">{site.description}</p>
+                  <p class="tool-desc">{item.description}</p>
                 </div>
-                <span class="go-arrow" aria-hidden="true">→</span>
+                <span class="go-arrow" aria-hidden="true">{item.external ? '↗' : '→'}</span>
               </a>
             ))
           }
@@ -135,7 +167,7 @@ const allTools = groups.flatMap((group) => group.sites);
           if (isVisible) visibleCount += 1;
         });
 
-        if (resultsTitle) resultsTitle.textContent = filter === 'all' ? '全部工具' : filter;
+        if (resultsTitle) resultsTitle.textContent = filter === 'all' ? '全部常用工具' : filter;
         if (resultsCount) resultsCount.textContent = `共 ${visibleCount} 个`;
       });
     });
@@ -389,6 +421,27 @@ const allTools = groups.flatMap((group) => group.sites);
   .category-chip.orange { background: #ffe0b2; }
   .category-chip.blue { background: #d6e4ff; }
   .category-chip.pink { background: #ffd6e7; }
+
+  .status-chip {
+    display: inline-block;
+    padding: 1px 7px;
+    font-size: 0.64rem;
+    font-weight: 800;
+    line-height: 1.6;
+    border: 1.5px solid var(--ink);
+    border-radius: 6px 4px 6px 4px;
+  }
+
+  .status-chip.featured {
+    background: var(--highlight);
+    transform: rotate(2deg);
+  }
+
+  .status-chip.vpn {
+    color: #fff;
+    background: var(--accent);
+    transform: rotate(-2deg);
+  }
 
   .tool-desc {
     display: -webkit-box;
