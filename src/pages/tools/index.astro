@@ -4,156 +4,502 @@ import ShareButton from '../../components/ShareButton.astro';
 import { getToolsByCategory } from '../../data/tools';
 
 const groups = getToolsByCategory();
+const allTools = groups.flatMap((group) => group.sites);
 ---
 
 <BaseLayout title="工具导航 · 卡卡罗特AI" description="卡卡罗特AI 私藏的宝藏网站导航，按功能分类，个个都是效率神器">
   <section class="container tools-index">
-    <div class="page-head reveal visible">
-      <h1 class="section-title">
-        工具导航
-        <svg class="doodle-star" viewBox="0 0 40 40" aria-hidden="true">
-          <path d="M20 4 L24 16 L37 16 L27 24 L31 36 L20 28 L9 36 L13 24 L3 16 L16 16 Z" fill="#dcedc8" stroke="#2b2b2b" stroke-width="2" stroke-linejoin="round" />
-        </svg>
-      </h1>
-      <p class="page-desc">私藏的宝藏网站，按功能分类整理，个个都是效率神器 ✨</p>
-      <ShareButton title="工具导航 · 卡卡罗特AI" />
-    </div>
+    <div class="tools-layout">
+      <aside class="tool-sidebar" aria-label="工具分类">
+        <div class="sidebar-brand">
+          <span class="sidebar-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <rect x="3" y="3" width="7" height="7" rx="2"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="2"></rect>
+              <rect x="3" y="14" width="7" height="7" rx="2"></rect>
+              <rect x="14" y="14" width="7" height="7" rx="2"></rect>
+            </svg>
+          </span>
+          <div>
+            <h2>工具分类</h2>
+            <p>快速找到趁手工具</p>
+          </div>
+        </div>
 
-    {
-      groups.map((group) => (
-        <section class="tool-group">
-          <h2 class="group-title">
-            <span class="marker">{group.category}</span>
-          </h2>
-          <div class="tool-grid">
-            {group.sites.map((site, i) => (
+        <nav class="category-list" aria-label="按分类筛选工具">
+          <button class="category-btn active" type="button" data-tool-filter="all" aria-pressed="true">
+            <svg class="category-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <rect x="3" y="3" width="7" height="7" rx="2"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="2"></rect>
+              <rect x="3" y="14" width="7" height="7" rx="2"></rect>
+              <rect x="14" y="14" width="7" height="7" rx="2"></rect>
+            </svg>
+            <span>全部</span>
+            <span class="category-count">{allTools.length}</span>
+          </button>
+
+          {
+            groups.map((group) => (
+              <button
+                class="category-btn"
+                type="button"
+                data-tool-filter={group.category}
+                aria-pressed="false"
+              >
+                {group.category === '图片处理' ? (
+                  <svg class="category-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="3" y="4" width="18" height="16" rx="3"></rect>
+                    <circle cx="8.5" cy="9" r="1.5"></circle>
+                    <path d="m5 17 4.5-4.5 3.2 3.2 2.3-2.3 4 3.6"></path>
+                  </svg>
+                ) : (
+                  <svg class="category-icon" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m13.5 2-8 12h6l-1 8 8-12h-6l1-8Z"></path>
+                  </svg>
+                )}
+                <span>{group.category}</span>
+                <span class="category-count">{group.sites.length}</span>
+              </button>
+            ))
+          }
+        </nav>
+      </aside>
+
+      <div class="tools-content">
+        <div class="page-head reveal visible">
+          <h1 class="section-title">
+            工具导航
+            <svg class="doodle-star" viewBox="0 0 40 40" aria-hidden="true">
+              <path d="M20 4 L24 16 L37 16 L27 24 L31 36 L20 28 L9 36 L13 24 L3 16 L16 16 Z" fill="#dcedc8" stroke="#2b2b2b" stroke-width="2" stroke-linejoin="round"></path>
+            </svg>
+          </h1>
+          <p class="page-desc">私藏的宝藏网站，按功能分类整理，个个都是效率神器 ✨</p>
+          <ShareButton title="工具导航 · 卡卡罗特AI" />
+        </div>
+
+        <div class="results-head">
+          <h2 id="tool-results-title">全部工具</h2>
+          <span class="results-count" aria-live="polite">共 {allTools.length} 个</span>
+        </div>
+
+        <div class="tool-grid" aria-labelledby="tool-results-title">
+          {
+            allTools.map((site, i) => (
               <a
                 href={`/tools/${site.slug}/`}
                 class={`tool-card sketch-box reveal ${i % 2 === 1 ? 'alt' : ''}`}
                 style={`transition-delay: ${i * 70}ms`}
+                data-tool-category={site.category}
               >
-                <span class="tape" aria-hidden="true" />
-                <div class="tool-emoji" set:html={site.icon ?? site.emoji} />
-                <h3>{site.name}</h3>
-                <p class="tool-desc">{site.description}</p>
-                <div class="tool-foot">
-                  <span class={`badge ${site.color}`}>{site.category}</span>
-                  <span class="go-arrow" aria-hidden="true">→</span>
+                <div class={`tool-emoji ${site.color}`} set:html={site.icon ?? site.emoji} />
+                <div class="tool-copy">
+                  <div class="tool-title-row">
+                    <h3>{site.name}</h3>
+                    <span class={`category-chip ${site.color}`}>{site.category}</span>
+                  </div>
+                  <p class="tool-desc">{site.description}</p>
                 </div>
+                <span class="go-arrow" aria-hidden="true">→</span>
               </a>
-            ))}
-          </div>
-        </section>
-      ))
-    }
+            ))
+          }
+        </div>
+      </div>
+    </div>
   </section>
 </BaseLayout>
 
+<script>
+  const toolsIndex = document.querySelector('.tools-index');
+
+  if (toolsIndex) {
+    const filterButtons = toolsIndex.querySelectorAll<HTMLButtonElement>('[data-tool-filter]');
+    const toolCards = toolsIndex.querySelectorAll<HTMLElement>('[data-tool-category]');
+    const resultsTitle = toolsIndex.querySelector<HTMLElement>('#tool-results-title');
+    const resultsCount = toolsIndex.querySelector<HTMLElement>('.results-count');
+
+    filterButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const filter = button.dataset.toolFilter ?? 'all';
+        let visibleCount = 0;
+
+        filterButtons.forEach((item) => {
+          const isActive = item === button;
+          item.classList.toggle('active', isActive);
+          item.setAttribute('aria-pressed', String(isActive));
+        });
+
+        toolCards.forEach((card) => {
+          const isVisible = filter === 'all' || card.dataset.toolCategory === filter;
+          card.hidden = !isVisible;
+          if (isVisible) visibleCount += 1;
+        });
+
+        if (resultsTitle) resultsTitle.textContent = filter === 'all' ? '全部工具' : filter;
+        if (resultsCount) resultsCount.textContent = `共 ${visibleCount} 个`;
+      });
+    });
+  }
+</script>
+
 <style>
   .tools-index {
-    padding-top: 56px;
-    padding-bottom: 40px;
+    max-width: 1420px;
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+
+  .tools-layout {
+    display: grid;
+    grid-template-columns: 230px minmax(0, 1fr);
+    gap: 34px;
+    align-items: start;
+  }
+
+  .tool-sidebar {
+    position: sticky;
+    top: 96px;
+    padding: 22px 16px 18px;
+    background: rgba(255, 253, 246, 0.94);
+    border: 2.5px solid var(--ink);
+    border-radius: var(--squiggle-2);
+    box-shadow: 4px 5px 0 rgba(43, 43, 43, 0.85);
+  }
+
+  .sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 2px 6px 20px;
+    margin-bottom: 18px;
+    border-bottom: 2px dashed rgba(43, 43, 43, 0.22);
+  }
+
+  .sidebar-mark {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    flex: 0 0 auto;
+    color: #fff;
+    background: var(--accent-3);
+    border: 2px solid var(--ink);
+    border-radius: 14px 8px 13px 9px;
+    transform: rotate(-2deg);
+  }
+
+  .sidebar-mark svg {
+    width: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+  }
+
+  .sidebar-brand h2 {
+    font-size: 1.15rem;
+    line-height: 1.2;
+  }
+
+  .sidebar-brand p {
+    margin-top: 3px;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    opacity: 0.65;
+  }
+
+  .category-list {
+    display: grid;
+    gap: 9px;
+  }
+
+  .category-btn {
+    display: grid;
+    grid-template-columns: 28px 1fr auto;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 11px 12px;
+    color: var(--ink);
+    background: transparent;
+    border: 2px solid transparent;
+    border-radius: 14px 8px 13px 9px;
+    font: inherit;
+    font-size: 0.92rem;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+    transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .category-btn:hover {
+    background: rgba(255, 214, 90, 0.22);
+  }
+
+  .category-btn.active {
+    background: #fff3d6;
+    border-color: var(--ink);
+    box-shadow: 2px 3px 0 rgba(43, 43, 43, 0.8);
+    transform: translate(-1px, -1px) rotate(-0.5deg);
+  }
+
+  .category-icon {
+    width: 24px;
+    height: 24px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.9;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .category-count {
+    min-width: 24px;
+    padding: 0 7px;
+    font-size: 0.72rem;
+    line-height: 1.65;
+    text-align: center;
+    background: rgba(43, 43, 43, 0.08);
+    border-radius: 999px;
+  }
+
+  .tools-content {
+    min-width: 0;
   }
 
   .page-head {
-    margin-bottom: 20px;
+    padding: 4px 2px 0;
   }
 
   .page-desc {
-    opacity: 0.8;
     margin-top: 6px;
+    opacity: 0.8;
   }
 
   .page-head :global(.share-btn) {
     margin-top: 10px;
   }
 
-  .tool-group {
-    margin-top: 44px;
+  .results-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    margin: 36px 2px 18px;
   }
 
-  .group-title {
-    font-size: 1.4rem;
+  .results-head h2 {
+    font-size: 1.35rem;
     font-weight: 900;
-    margin-bottom: 24px;
+  }
+
+  .results-count {
+    flex: 0 0 auto;
+    font-size: 0.82rem;
+    opacity: 0.62;
   }
 
   .tool-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-    gap: 28px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
   }
 
   .tool-card {
     position: relative;
-    display: block;
-    padding: 26px 22px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    min-width: 0;
+    min-height: 138px;
+    padding: 20px 46px 20px 18px;
     text-decoration: none;
+    overflow: hidden;
+  }
+
+  .tool-card[hidden] {
+    display: none;
   }
 
   .tool-card:hover {
-    transform: translateY(-6px) rotate(-1.2deg);
-    box-shadow: 7px 9px 0 rgba(43, 43, 43, 0.85);
+    transform: translateY(-5px) rotate(-0.6deg);
+    box-shadow: 7px 8px 0 rgba(43, 43, 43, 0.85);
   }
 
   .tool-card:nth-child(even):hover {
-    transform: translateY(-6px) rotate(1.2deg);
-  }
-
-  .tape {
-    position: absolute;
-    top: -12px;
-    left: 50%;
-    width: 84px;
-    height: 24px;
-    transform: translateX(-50%) rotate(-3deg);
-    background: rgba(255, 214, 90, 0.75);
-    border: 1.5px dashed rgba(43, 43, 43, 0.4);
+    transform: translateY(-5px) rotate(0.6deg);
   }
 
   .tool-emoji {
-    font-size: 2.4rem;
-    line-height: 1;
-    margin-bottom: 12px;
-    transition: transform 0.25s ease;
+    display: grid;
+    place-items: center;
+    width: 68px;
+    height: 68px;
+    flex: 0 0 auto;
+    font-size: 2rem;
+    border: 2px solid var(--ink);
+    border-radius: 24px 17px 22px 18px;
+    transition: transform 0.22s ease;
   }
 
-  .tool-emoji svg {
-    width: 2.6rem;
-    height: 2.6rem;
+  .tool-emoji.green { background: #dcedc8; }
+  .tool-emoji.orange { background: #ffe0b2; }
+  .tool-emoji.blue { background: #d6e4ff; }
+  .tool-emoji.pink { background: #ffd6e7; }
+
+  .tool-emoji :global(svg) {
     display: block;
+    width: 38px;
+    height: 38px;
   }
 
   .tool-card:hover .tool-emoji {
-    transform: scale(1.25) rotate(-8deg);
+    transform: scale(1.08) rotate(-4deg);
+  }
+
+  .tool-copy {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .tool-title-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px 8px;
+    margin-bottom: 6px;
   }
 
   .tool-card h3 {
-    font-size: 1.2rem;
-    margin-bottom: 8px;
+    min-width: 0;
+    font-size: 1.15rem;
+    line-height: 1.25;
   }
+
+  .category-chip {
+    display: inline-block;
+    padding: 1px 7px;
+    font-size: 0.66rem;
+    font-weight: 700;
+    line-height: 1.6;
+    border: 1.5px solid rgba(43, 43, 43, 0.7);
+    border-radius: 999px;
+  }
+
+  .category-chip.green { background: #dcedc8; }
+  .category-chip.orange { background: #ffe0b2; }
+  .category-chip.blue { background: #d6e4ff; }
+  .category-chip.pink { background: #ffd6e7; }
 
   .tool-desc {
-    font-size: 0.95rem;
-    opacity: 0.8;
-    min-height: 3.4em;
-  }
-
-  .tool-foot {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 14px;
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 0.84rem;
+    line-height: 1.55;
+    opacity: 0.72;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
 
   .go-arrow {
-    font-size: 1.3rem;
+    position: absolute;
+    right: 14px;
+    bottom: 14px;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    font-size: 1rem;
     font-weight: 900;
-    transition: transform 0.2s ease;
+    background: rgba(43, 43, 43, 0.07);
+    border-radius: 50%;
+    transition: transform 0.2s ease, color 0.2s ease, background 0.2s ease;
   }
 
   .tool-card:hover .go-arrow {
-    transform: translateX(6px);
-    color: var(--accent);
+    color: #fff;
+    background: var(--accent);
+    transform: translateX(3px);
+  }
+
+  @media (max-width: 1180px) {
+    .tools-index {
+      max-width: 1040px;
+    }
+
+    .tools-layout {
+      grid-template-columns: 210px minmax(0, 1fr);
+      gap: 26px;
+    }
+
+    .tool-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 860px) {
+    .tools-layout {
+      display: block;
+    }
+
+    .tool-sidebar {
+      position: static;
+      padding: 16px;
+      margin-bottom: 34px;
+    }
+
+    .sidebar-brand {
+      padding-bottom: 14px;
+      margin-bottom: 14px;
+    }
+
+    .category-list {
+      display: flex;
+      gap: 10px;
+      padding: 2px 2px 6px;
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+
+    .category-btn {
+      display: flex;
+      width: auto;
+      flex: 0 0 auto;
+    }
+  }
+
+  @media (max-width: 680px) {
+    .tools-index {
+      padding-top: 32px;
+    }
+
+    .tool-grid {
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+
+    .results-head {
+      margin-top: 30px;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .sidebar-brand p {
+      display: none;
+    }
+
+    .tool-card {
+      min-height: 126px;
+      padding: 17px 42px 17px 15px;
+    }
+
+    .tool-emoji {
+      width: 58px;
+      height: 58px;
+    }
+
+    .tool-emoji :global(svg) {
+      width: 33px;
+      height: 33px;
+    }
   }
 </style>
