@@ -11,6 +11,14 @@ export interface Video {
 // 运行 node scripts/fetch-bilibili-videos.mjs <视频链接或BV号> 可自动抓取标题/简介/封面/时间
 export const videos: Video[] = [
   {
+    bvid: 'BV1dR876WEjy',
+    title: 'DeepSeek Harness 怎么安装？保姆级使用教程，快速入门！',
+    description: '前几天DeepSeek发布Harness，被喷“毛坯房”，梁圣变梁子。结果GitHub狂揽153K Star，插件突破7000+，口碑两极反转，梁子重回梁帝。🤔 Harness到底是啥？ 一个公式你就懂了：Agent - 模型 = Har…',
+    cover: '/covers/bili-BV1dR876WEjy.jpg',
+    url: 'https://www.bilibili.com/video/BV1dR876WEjy/',
+    date: '2026-08-19',
+  },
+  {
     bvid: 'BV1DPbv6tEdd',
     title: 'Codex支持1M上下文了 ！保姆级教程！',
     description: 'Codex 隐藏设置！GPT-5.6 上下文从 258K 提升到 1M！ Codex 1M 上下文隐藏开关！两步搞定。 GPT-5.6 Sol 默认只有 235K，改配置文件直接解锁 100 万 Token。 Mac/Win 打开 ~/.c…',
