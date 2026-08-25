@@ -176,6 +176,21 @@ img {
   transform: translateY(0);
 }
 
+/* 卡片进入视口时像手绘便签一样逐张落下 */
+.project-card.reveal,
+.article-card.reveal,
+.video-card.reveal,
+.tool-card.reveal {
+  transform: translateY(38px) scale(0.96);
+}
+
+.project-card.reveal.visible,
+.article-card.reveal.visible,
+.video-card.reveal.visible,
+.tool-card.reveal.visible {
+  transform: translateY(0) scale(1);
+}
+
 /* ===== 章节标题 ===== */
 .section-title {
   font-size: 2rem;
@@ -185,13 +200,108 @@ img {
   margin-bottom: 8px;
 }
 
+.section-title::after {
+  content: '';
+  position: absolute;
+  left: -3px;
+  bottom: 0;
+  width: calc(100% + 8px);
+  height: 5px;
+  background: var(--accent);
+  border-radius: 60% 35% 55% 40%;
+  opacity: 0.9;
+  transform: rotate(-1deg) scaleX(0);
+  transform-origin: left center;
+}
+
+.section-head.visible .section-title::after,
+.page-head.visible .section-title::after {
+  animation: section-stroke-in 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
 .section-title .doodle-star {
   position: absolute;
   top: -18px;
   right: -34px;
   width: 30px;
-  animation: spin-slow 10s linear infinite;
+  opacity: 0;
+  scale: 0;
   transform-origin: center;
+}
+
+.section-head.visible .section-title .doodle-star,
+.page-head.visible .section-title .doodle-star {
+  animation:
+    spin-slow 10s linear 0.7s infinite,
+    section-star-pop 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.4) 0.35s both;
+}
+
+@keyframes section-stroke-in {
+  from { transform: rotate(-1deg) scaleX(0); }
+  to { transform: rotate(-1deg) scaleX(1); }
+}
+
+@keyframes section-star-pop {
+  0% { opacity: 0; scale: 0; }
+  70% { opacity: 1; scale: 1.25; }
+  100% { opacity: 1; scale: 1; }
+}
+
+/* 封面像被笔刷擦开一样随卡片揭幕 */
+.article-cover,
+.video-cover {
+  position: relative;
+  isolation: isolate;
+}
+
+.article-cover::after,
+.video-cover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: var(--paper);
+  clip-path: polygon(0 0, 96% 0, 100% 14%, 96% 28%, 100% 43%, 95% 60%, 100% 76%, 96% 100%, 0 100%);
+  transform-origin: right center;
+  transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1) 0.16s;
+}
+
+.article-card.visible .article-cover::after,
+.video-card.visible .video-cover::after {
+  transform: scaleX(0);
+}
+
+/* 点击主要按钮时短暂迸出手绘火花 */
+.sketch-btn,
+.share-btn {
+  position: relative;
+}
+
+.click-spark {
+  position: absolute;
+  left: var(--spark-left);
+  top: var(--spark-top);
+  z-index: 20;
+  color: var(--spark-color);
+  font-size: var(--spark-size);
+  font-weight: 900;
+  line-height: 1;
+  pointer-events: none;
+  translate: -50% -50%;
+  animation: click-spark-fly 0.55s cubic-bezier(0.2, 0.75, 0.25, 1) forwards;
+}
+
+@keyframes click-spark-fly {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(0deg) scale(0.6);
+  }
+  70% { opacity: 1; }
+  100% {
+    opacity: 0;
+    transform: translate(var(--spark-x), var(--spark-y)) rotate(var(--spark-rotate)) scale(1.15);
+  }
 }
 
 /* ===== 标签徽章 ===== */
@@ -231,7 +341,10 @@ img {
 .tool-card,
 .about-card,
 .post-nav-card {
-  transition: rotate 0.22s ease;
+  transition:
+    opacity 0.62s ease,
+    transform 0.62s cubic-bezier(0.22, 1, 0.36, 1),
+    rotate 0.62s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .project-card:nth-child(even),
@@ -267,5 +380,24 @@ img {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .reveal {
+    transition-delay: 0ms !important;
+  }
+
+  .section-title::after {
+    transform: rotate(-1deg) scaleX(1);
+  }
+
+  .section-title .doodle-star {
+    opacity: 1;
+    scale: 1;
+    animation: none !important;
+  }
+
+  .article-cover::after,
+  .video-cover::after {
+    display: none;
   }
 }

@@ -174,6 +174,13 @@ const ogImageUrl = new URL(ogImagePath, Astro.site);
         (entries) => {
           for (const entry of entries) {
             if (entry.isIntersecting) {
+              entry.target.addEventListener(
+                'transitionend',
+                () => {
+                  if (entry.target instanceof HTMLElement) entry.target.style.transitionDelay = '0ms';
+                },
+                { once: true }
+              );
               entry.target.classList.add('visible');
               observer.unobserve(entry.target);
             }
@@ -182,6 +189,42 @@ const ogImageUrl = new URL(ogImagePath, Astro.site);
         { threshold: 0.12 }
       );
       document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+      // 主要按钮点击反馈：从落点迸出一小簇手绘星点。
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const sparkDirections = [
+        [-30, -26],
+        [0, -38],
+        [31, -24],
+        [36, 5],
+        [-34, 8],
+        [4, 28],
+      ];
+      const sparkShapes = ['✦', '•', '×', '—', '✦', '•'];
+      const sparkColors = ['#ff6b35', '#f4b942', '#4361ee', '#4a7c59', '#ff6b35', '#f4b942'];
+
+      document.addEventListener('pointerdown', (event) => {
+        if (reducedMotion.matches || event.button !== 0 || !(event.target instanceof Element)) return;
+        const target = event.target.closest('.sketch-btn, .share-btn');
+        if (!(target instanceof HTMLElement)) return;
+
+        const rect = target.getBoundingClientRect();
+        sparkDirections.forEach(([x, y], index) => {
+          const spark = document.createElement('span');
+          spark.className = 'click-spark';
+          spark.textContent = sparkShapes[index];
+          spark.setAttribute('aria-hidden', 'true');
+          spark.style.setProperty('--spark-left', `${event.clientX - rect.left}px`);
+          spark.style.setProperty('--spark-top', `${event.clientY - rect.top}px`);
+          spark.style.setProperty('--spark-x', `${x}px`);
+          spark.style.setProperty('--spark-y', `${y}px`);
+          spark.style.setProperty('--spark-rotate', `${index % 2 === 0 ? -35 : 35}deg`);
+          spark.style.setProperty('--spark-size', `${index % 3 === 0 ? 16 : 12}px`);
+          spark.style.setProperty('--spark-color', sparkColors[index]);
+          target.appendChild(spark);
+          spark.addEventListener('animationend', () => spark.remove(), { once: true });
+        });
+      });
     </script>
 
     <style>
