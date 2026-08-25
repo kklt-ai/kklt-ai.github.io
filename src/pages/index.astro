@@ -1,12 +1,10 @@
 ---
 import { Image } from 'astro:assets';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { getFeaturedProjects } from '../data/projects';
 import { getAllArticles } from '../data/articles';
 import { getLatestVideos } from '../data/videos';
 import avatar from '../assets/avatar.jpg';
 
-const featuredProjects = getFeaturedProjects(3);
 const articles = (await getAllArticles()).slice(0, 5);
 const videos = getLatestVideos(3);
 
@@ -63,7 +61,6 @@ const introEndCharacters = typedCharacters(' ～');
       </p>
       <div class="hero-actions">
         <a href="#articles" class="sketch-btn primary">看看文章 📚</a>
-        <a href="#projects" class="sketch-btn">逛逛项目 🚀</a>
         <div class="wechat-follow">
           <button
             type="button"
@@ -124,48 +121,6 @@ const introEndCharacters = typedCharacters(' ～');
       <svg class="floaty f3" viewBox="0 0 28 40" width="26" style="--r: 10deg" aria-hidden="true">
         <path d="M16 2 L6 22 L13 22 L10 38 L23 16 L15 16 L20 2 Z" fill="#ff6b35" stroke="#2b2b2b" stroke-width="2" stroke-linejoin="round" />
       </svg>
-    </div>
-  </section>
-
-  <!-- ===== Vibe Coding 精选 ===== -->
-  <section id="projects" class="container section">
-    <div class="section-head reveal">
-      <h2 class="section-title">
-        Vibe Coding精选
-        <svg class="doodle-star" viewBox="0 0 40 40" aria-hidden="true">
-          <path d="M20 4 L24 16 L37 16 L27 24 L31 36 L20 28 L9 36 L13 24 L3 16 L16 16 Z" fill="#ffd65a" stroke="#2b2b2b" stroke-width="2" stroke-linejoin="round" />
-        </svg>
-      </h2>
-    </div>
-
-    <div class="project-spotlight">
-      {
-        featuredProjects.map((p, i) => (
-          <a
-            href={p.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            class={`project-card sketch-box reveal ${i % 2 === 1 ? 'alt' : ''}`}
-            style={`transition-delay: ${i * 80}ms`}
-          >
-            <span class="tape" aria-hidden="true" />
-            {p.needVpn && <span class="vpn-tag">需要魔法</span>}
-            <div class="project-head">
-              <span class="project-icon" set:html={p.icon ?? p.emoji} />
-              <h3>{p.name}</h3>
-            </div>
-            <p class="project-desc">{p.description}</p>
-            <div class="project-foot">
-              <span class={`badge ${p.color}`}>{p.tag}</span>
-              <span class="go-arrow" aria-hidden="true">→</span>
-            </div>
-          </a>
-        ))
-      }
-    </div>
-
-    <div class="section-more reveal">
-      <a href="/tools/" class="sketch-btn">全部常用工具 →</a>
     </div>
   </section>
 
@@ -477,112 +432,10 @@ const introEndCharacters = typedCharacters(' ～');
   .f2 { top: 30px; right: -44px; animation-delay: 0.9s; }
   .f3 { bottom: 10px; left: -40px; animation-delay: 1.5s; }
 
-  /* ===== Vibe Coding 精选：按项目数量自适应并居中 ===== */
-  .project-spotlight {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 360px));
-    justify-content: center;
-    gap: 28px;
-  }
-
-  .project-card {
-    position: relative;
-    display: block;
-    padding: 22px 20px 18px;
-    text-decoration: none;
-  }
-
-  .project-card:hover {
-    transform: translateY(-6px) rotate(-1.2deg);
-    box-shadow: 7px 9px 0 rgba(43, 43, 43, 0.85);
-  }
-
-  .project-card:nth-child(even):hover {
-    transform: translateY(-6px) rotate(1.2deg);
-  }
-
-  .tape {
-    position: absolute;
-    top: -10px;
-    left: 50%;
-    width: 64px;
-    height: 18px;
-    transform: translateX(-50%) rotate(-3deg);
-    background: rgba(255, 214, 90, 0.75);
-    border: 1.5px dashed rgba(43, 43, 43, 0.4);
-  }
-
-  .project-head {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 10px;
-  }
-
-  .project-icon {
-    flex-shrink: 0;
-    display: grid;
-    place-items: center;
-    width: 46px;
-    height: 46px;
-    background: #fff;
-    border: 2.5px solid var(--ink);
-    border-radius: var(--squiggle);
-    transform: rotate(-3deg);
-    box-shadow: 2px 3px 0 rgba(43, 43, 43, 0.85);
-    font-size: 1.4rem;
-    line-height: 1;
-    transition: transform 0.25s ease;
-  }
-
-  .project-icon svg {
-    width: 26px;
-    height: 26px;
-  }
-
-  .project-card:hover .project-icon {
-    transform: rotate(3deg) scale(1.08);
-  }
-
-  .project-card h3 {
-    font-size: 1.2rem;
-  }
-
-  .project-desc {
-    font-size: 0.95rem;
-    opacity: 0.8;
-  }
-
-  .project-foot {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 14px;
-  }
-
-  .vpn-tag {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    font-size: 0.78rem;
-    font-weight: 800;
-    padding: 3px 9px;
-    background: var(--accent);
-    color: #fff;
-    border: 1.5px solid var(--ink);
-    border-radius: 6px;
-    transform: rotate(6deg);
-  }
-
   .go-arrow {
     font-size: 1.3rem;
     font-weight: 900;
     transition: transform 0.2s ease;
-  }
-
-  .project-card:hover .go-arrow {
-    transform: translateX(6px);
-    color: var(--accent);
   }
 
   /* ===== 文章卡片（横向长方形：左封面，右标题/描述） ===== */

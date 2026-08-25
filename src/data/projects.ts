@@ -7,14 +7,14 @@ export interface Project {
   icon?: string;
   tag: string;
   color: 'green' | 'orange' | 'blue' | 'pink';
-  /** 首页「Vibe Coding精选」展示，建议只标 2～3 个 */
+  /** 在工具页标记为精选 */
   featured?: boolean;
   /** 部署在外网、需要科学上网才能访问时标记，卡片上会显示「需要魔法」 */
   needVpn?: boolean;
 }
 
 // 在这里维护你的 vibe-coding 个人项目，url 填项目地址即可
-// featured: true 的会出现在首页精选区
+// featured: true 的会在工具页显示「精选」标记
 export const projects: Project[] = [
   {
     name: '公众号排版助手',
@@ -39,8 +39,3 @@ export const projects: Project[] = [
     needVpn: true,
   },
 ];
-
-/** 首页 Vibe Coding 精选，最多 3 个 */
-export function getFeaturedProjects(limit = 3): Project[] {
-  return projects.filter((p) => p.featured).slice(0, limit);
-}
