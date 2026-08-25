@@ -211,6 +211,56 @@ img {
 .badge.blue { background: #d6e4ff; }
 .badge.pink { background: #ffd6e7; }
 
+/* ===== 徽章 hover 弹跳 ===== */
+@keyframes badge-pop {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  40% { transform: scale(1.18) rotate(-4deg); }
+  70% { transform: scale(0.96) rotate(2deg); }
+}
+
+.badge:hover {
+  animation: badge-pop 0.35s ease;
+}
+
+/* ===== 卡片交错微倾斜：手绘散落感 =====
+   用独立的 rotate 属性，避免与 reveal/hover 的 transform 冲突。
+   空闲时奇偶卡片各带 0.5° 微倾，hover 时回正并交由各页 hover 规则抬起。 */
+.project-card,
+.article-card,
+.video-card,
+.tool-card,
+.about-card,
+.post-nav-card {
+  transition: rotate 0.22s ease;
+}
+
+.project-card:nth-child(even),
+.article-card:nth-child(even),
+.video-card:nth-child(even),
+.tool-card:nth-child(even),
+.about-card:nth-child(even),
+.post-nav-card:nth-child(even) {
+  rotate: 0.5deg;
+}
+
+.project-card:nth-child(odd),
+.article-card:nth-child(odd),
+.video-card:nth-child(odd),
+.tool-card:nth-child(odd),
+.about-card:nth-child(odd),
+.post-nav-card:nth-child(odd) {
+  rotate: -0.5deg;
+}
+
+.project-card:hover,
+.article-card:hover,
+.video-card:hover,
+.tool-card:hover,
+.about-card:hover,
+.post-nav-card:hover {
+  rotate: 0deg;
+}
+
 /* ===== 减少动画偏好 ===== */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

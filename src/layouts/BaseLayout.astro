@@ -80,6 +80,9 @@ const ogImageUrl = new URL(ogImagePath, Astro.site);
       <svg class="footer-squiggle" viewBox="0 0 1200 12" preserveAspectRatio="none" aria-hidden="true">
         <path d="M0 6 Q30 0 60 6 T120 6 T180 6 T240 6 T300 6 T360 6 T420 6 T480 6 T540 6 T600 6 T660 6 T720 6 T780 6 T840 6 T900 6 T960 6 T1020 6 T1080 6 T1140 6 T1200 6" fill="none" stroke="#2b2b2b" stroke-width="2.5" />
       </svg>
+      <svg class="footer-doodle" viewBox="0 0 40 40" aria-hidden="true" style="--r: -6deg">
+        <path d="M20 4 L24 16 L37 16 L27 24 L31 36 L20 28 L9 36 L13 24 L3 16 L16 16 Z" fill="#ffd65a" stroke="#2b2b2b" stroke-width="2" stroke-linejoin="round" />
+      </svg>
       <div class="container footer-inner">
         <a
           href="https://github.com/kklt-ai"
@@ -99,6 +102,24 @@ const ogImageUrl = new URL(ogImagePath, Astro.site);
         <p>© {new Date().getFullYear()} 卡卡罗特AI · 持续分享有用的AI干货教程～</p>
       </div>
     </footer>
+
+    <!-- 滚动反馈：顶部虚线进度线 + 回到顶部 -->
+    <div class="scroll-progress" aria-hidden="true">
+      <span class="scroll-progress-bar"></span>
+    </div>
+
+    <button class="to-top" type="button" aria-label="回到顶部">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+        <path
+          d="M12 20 V5 M12 5 L5.5 11.5 M12 5 L18.5 11.5"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
 
     <script>
       // 移动端汉堡菜单：展开/收起「更多」面板
@@ -123,6 +144,30 @@ const ogImageUrl = new URL(ogImagePath, Astro.site);
           }
         });
       }
+
+      // 滚动反馈：顶部进度线 + 回到顶部按钮
+      const progressBar = document.querySelector('.scroll-progress-bar');
+      const toTop = document.querySelector('.to-top');
+      let ticking = false;
+      const onScrollFeedback = () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          const y = window.scrollY;
+          const max = document.documentElement.scrollHeight - window.innerHeight;
+          if (progressBar) {
+            progressBar.style.transform = `scaleX(${max > 0 ? y / max : 0})`;
+          }
+          if (toTop) toTop.classList.toggle('show', y > 400);
+          ticking = false;
+        });
+      };
+      window.addEventListener('scroll', onScrollFeedback, { passive: true });
+      onScrollFeedback();
+      toTop?.addEventListener('click', () => {
+        const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        window.scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+      });
 
       // 滚动渐入动画
       const observer = new IntersectionObserver(
@@ -165,6 +210,16 @@ const ogImageUrl = new URL(ogImagePath, Astro.site);
         font-size: 1.35rem;
         font-weight: 900;
         text-decoration: none;
+      }
+
+      .logo:hover {
+        animation: logo-wiggle 0.4s ease;
+      }
+
+      @keyframes logo-wiggle {
+        0%, 100% { transform: rotate(0deg); }
+        30% { transform: rotate(-4deg) scale(1.04); }
+        70% { transform: rotate(4deg) scale(1.04); }
       }
 
       /* 汉堡按钮：仅移动端显示 */
@@ -237,6 +292,16 @@ const ogImageUrl = new URL(ogImagePath, Astro.site);
         right: 0;
       }
 
+      .nav-links a:hover {
+        animation: nav-hop 0.3s ease;
+      }
+
+      @keyframes nav-hop {
+        0% { transform: translateY(0); }
+        40% { transform: translateY(-3px) rotate(-1deg); }
+        100% { transform: translateY(0); }
+      }
+
       .nav-github {
         display: inline-flex;
         align-items: center;
@@ -261,8 +326,19 @@ const ogImageUrl = new URL(ogImagePath, Astro.site);
       }
 
       .site-footer {
+        position: relative;
         margin-top: 90px;
         text-align: center;
+      }
+
+      .footer-doodle {
+        position: absolute;
+        top: 2px;
+        right: 6%;
+        width: 26px;
+        height: 26px;
+        opacity: 0.8;
+        animation: float 4.5s ease-in-out infinite;
       }
 
       .footer-inner {
@@ -293,6 +369,61 @@ const ogImageUrl = new URL(ogImagePath, Astro.site);
 
       .footer-inner p {
         margin: 0;
+      }
+
+      /* ===== 顶部滚动进度线（手绘虚线风格） ===== */
+      .scroll-progress {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 5px;
+        z-index: 200;
+        pointer-events: none;
+      }
+
+      .scroll-progress-bar {
+        display: block;
+        height: 100%;
+        background: repeating-linear-gradient(90deg, var(--accent) 0 12px, transparent 12px 20px);
+        transform: scaleX(0);
+        transform-origin: left;
+      }
+
+      /* ===== 回到顶部按钮（手绘风格） ===== */
+      .to-top {
+        position: fixed;
+        right: 22px;
+        bottom: 22px;
+        z-index: 150;
+        display: grid;
+        place-items: center;
+        width: 48px;
+        height: 48px;
+        background: var(--card-bg);
+        border: 2.5px solid var(--ink);
+        border-radius: 16px 18px 15px 19px;
+        box-shadow: 3px 4px 0 rgba(43, 43, 43, 0.85);
+        color: var(--ink);
+        cursor: pointer;
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+        transform: translateY(18px) rotate(4deg);
+        transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+      }
+
+      .to-top.show {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translateY(0) rotate(0deg);
+      }
+
+      .to-top:hover {
+        transform: translateY(-3px) rotate(-4deg);
+        box-shadow: 4px 6px 0 rgba(43, 43, 43, 0.85);
+        background: #fff3d6;
       }
 
       @media (max-width: 640px) {
