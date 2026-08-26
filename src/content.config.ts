@@ -10,6 +10,7 @@ const blog = defineCollection({
     tags: z.array(z.string()).default([]),
     cover: z.string().optional(),
     pinned: z.boolean().default(false),
+    hidden: z.boolean().default(false),
     wechatUrl: z.string().url().optional(),
   }),
 });

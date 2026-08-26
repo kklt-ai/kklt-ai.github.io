@@ -69,6 +69,11 @@ async function main() {
   // 命令行参数里的链接/BV号 + 数据文件里已有的 BV 号，去重后全部刷新
   const source = await readFile(dataFile, 'utf8');
   const existing = [...source.matchAll(/bvid:\s*'([^']+)'/g)].map((m) => m[1]);
+  const hiddenBvids = new Set(
+    [...source.matchAll(/\{\s*bvid:\s*'([^']+)'[\s\S]*?\n\s*\},/g)]
+      .filter((m) => /\bhidden:\s*true/.test(m[0]))
+      .map((m) => m[1])
+  );
   const fromArgs = process.argv
     .slice(2)
     .map((arg) => arg.match(/BV[a-zA-Z0-9]+/)?.[0])
@@ -86,6 +91,7 @@ async function main() {
     const video = await fetchVideo(bvid);
     video.cover = await downloadCover(video);
     delete video.coverUrl;
+    if (hiddenBvids.has(bvid)) video.hidden = true;
     videos.push(video);
     console.log(`  ${video.date} ${video.title}`);
   }
@@ -100,6 +106,7 @@ async function main() {
   cover: string; // 封面图地址，本地 public/covers/ 下的图片
   url: string; // B 站视频链接
   date: string; // YYYY-MM-DD
+  hidden?: boolean; // true 时暂时下架，不在网站中显示
 }
 
 // 在这里维护你的 B 站视频，按发布日期倒序排列
@@ -114,14 +121,19 @@ ${videos
     cover: '${v.cover}',
     url: '${v.url}',
     date: '${v.date}',
-  },`
+${v.hidden ? '    hidden: true,\n' : ''}  },`
   )
   .join('\n')}
 ];
 
+/** 所有未下架的视频 */
+export function getVisibleVideos(): Video[] {
+  return videos.filter((video) => !video.hidden);
+}
+
 /** 首页「视频教程」展示，取最新 limit 个 */
 export function getLatestVideos(limit = 3): Video[] {
-  return [...videos].sort((a, b) => b.date.localeCompare(a.date)).slice(0, limit);
+  return getVisibleVideos().sort((a, b) => b.date.localeCompare(a.date)).slice(0, limit);
 }
 `;
 

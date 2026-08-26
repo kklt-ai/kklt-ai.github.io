@@ -17,7 +17,7 @@ const catalogItems = [
     featured: false,
     needVpn: false,
   })),
-  ...projects.map((project) => ({
+  ...projects.filter((project) => !project.hidden).map((project) => ({
     name: project.name,
     description: project.description,
     href: project.url,

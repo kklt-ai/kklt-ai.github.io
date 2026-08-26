@@ -103,6 +103,7 @@ node scripts/fetch-bilibili-videos.mjs <视频链接或BV号> [...更多]
 
 - Markdown frontmatter 必须符合 `src/content.config.ts`：`title`、`description`、`pubDate` 必填，`tags` 默认为空数组，`cover` 可选。
 - 文章置顶：站内文章在 frontmatter 中设置 `pinned: true`（默认 `false`），公众号文章在 `src/data/wechat-articles.ts` 对应条目设置 `pinned: true`。置顶文章排在列表最前（置顶之间仍按日期倒序），卡片显示「置顶」徽章；支持多篇同时置顶。
+- 内容临时下架：站内文章在 frontmatter 中设置 `hidden: true`，公众号文章、B 站视频、收录工具和自建工具分别在 `src/data/wechat-articles.ts`、`src/data/videos.ts`、`src/data/tools.ts`、`src/data/projects.ts` 的对应条目中设置 `hidden: true`。下架内容不会出现在首页、栏目列表、文章标签或上一篇/下一篇中，站内文章和收录工具也不会生成详情路由；删除该配置或改为 `hidden: false` 即可恢复展示。刷新公众号文章或 B 站视频数据时，脚本会保留已有的 `hidden` 配置。
 - 文章文件名即 URL slug；改名会改变公开链接，未经明确要求不要修改。
 - 日期统一使用 `YYYY-MM-DD`，以保证字符串排序与展示结果一致。
 - 公众号封面放在 `public/covers/`，引用路径写成 `/covers/<文件名>`。

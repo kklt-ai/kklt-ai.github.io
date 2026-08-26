@@ -14,7 +14,7 @@ export interface Article {
 
 // 合并公众号文章和站内 Markdown 文章：置顶文章在前，其余按时间倒序（最新在前），不区分入口
 export async function getAllArticles(): Promise<Article[]> {
-  const posts = await getCollection('blog');
+  const posts = await getCollection('blog', ({ data }) => !data.hidden);
 
   const blogArticles: Article[] = posts.map((p) => ({
     title: p.data.title,
@@ -27,7 +27,7 @@ export async function getAllArticles(): Promise<Article[]> {
     pinned: p.data.pinned,
   }));
 
-  const wechat: Article[] = wechatArticles.map((a) => ({
+  const wechat: Article[] = wechatArticles.filter((a) => !a.hidden).map((a) => ({
     title: a.title,
     description: a.description,
     cover: a.cover,

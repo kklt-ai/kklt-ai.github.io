@@ -90,6 +90,15 @@ async function downloadCover(coverUrl, referer, index) {
 async function main() {
   const source = await readFile(dataFile, 'utf8');
   const urls = [...source.matchAll(/url:\s*'([^']+)'/g)].map((m) => m[1]);
+  const existingSettings = new Map(
+    [...source.matchAll(/\{[\s\S]*?url:\s*'([^']+)'[\s\S]*?\n\s*\},/g)].map((m) => [
+      m[1],
+      {
+        pinned: /\bpinned:\s*true/.test(m[0]),
+        hidden: /\bhidden:\s*true/.test(m[0]),
+      },
+    ])
+  );
   if (urls.length === 0) throw new Error('数据文件里没有找到文章链接');
 
   await mkdir(coverDir, { recursive: true });
@@ -98,7 +107,7 @@ async function main() {
   for (const [i, url] of urls.entries()) {
     console.log(`[${i + 1}/${urls.length}] 抓取 ${url}`);
     const article = await fetchArticle(url);
-    articles.push({ ...article, url });
+    articles.push({ ...article, url, ...existingSettings.get(url) });
     console.log(`  ${article.date} ${article.title}`);
   }
 
@@ -121,6 +130,8 @@ async function main() {
   cover: string; // 封面图地址，可用公众号封面图或本地 public/ 下的图片
   url: string;   // 公众号文章链接
   date: string;
+  pinned?: boolean; // true 时该文章在列表中置顶
+  hidden?: boolean; // true 时暂时下架，不在网站中显示
 }
 
 // 在这里维护你的公众号文章，新文章往数组最前面加
@@ -134,7 +145,7 @@ ${articles
     cover: '${a.cover}',
     url: '${a.url}',
     date: '${a.date}',
-  },`
+${a.pinned ? '    pinned: true,\n' : ''}${a.hidden ? '    hidden: true,\n' : ''}  },`
   )
   .join('\n')}
 ];

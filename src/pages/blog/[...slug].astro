@@ -6,7 +6,7 @@ import ShareButton from '../../components/ShareButton.astro';
 import wechatQrcode from '../../assets/wechat_qrcode.JPG';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog');
+  const posts = await getCollection('blog', ({ data }) => !data.hidden);
   return posts.map((post) => ({
     params: { slug: post.id },
     props: { post },
@@ -24,7 +24,7 @@ const latinWords = body.replace(/[一-龥]/g, ' ').split(/\s+/).filter(Boolean).
 const readingMinutes = Math.max(1, Math.round(chineseChars / 400 + latinWords / 200));
 
 // 站内文章按发布日期倒序，取相邻两篇做「上一篇 / 下一篇」
-const sortedPosts = (await getCollection('blog')).sort(
+const sortedPosts = (await getCollection('blog', ({ data }) => !data.hidden)).sort(
   (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
 );
 const postIndex = sortedPosts.findIndex((p) => p.id === post.id);

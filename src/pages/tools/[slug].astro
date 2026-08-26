@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { tools, type NavSite } from '../../data/tools';
 
 export function getStaticPaths() {
-  return tools.map((site) => ({
+  return tools.filter((site) => !site.hidden).map((site) => ({
     params: { slug: site.slug },
     props: { site },
   }));

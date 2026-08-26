@@ -5,6 +5,7 @@ export interface Video {
   cover: string; // 封面图地址，本地 public/covers/ 下的图片
   url: string; // B 站视频链接
   date: string; // YYYY-MM-DD
+  hidden?: boolean; // true 时暂时下架，不在网站中显示
 }
 
 // 在这里维护你的 B 站视频，按发布日期倒序排列
@@ -60,7 +61,12 @@ export const videos: Video[] = [
   },
 ];
 
+/** 所有未下架的视频 */
+export function getVisibleVideos(): Video[] {
+  return videos.filter((video) => !video.hidden);
+}
+
 /** 首页「视频教程」展示，取最新 limit 个 */
 export function getLatestVideos(limit = 3): Video[] {
-  return [...videos].sort((a, b) => b.date.localeCompare(a.date)).slice(0, limit);
+  return getVisibleVideos().sort((a, b) => b.date.localeCompare(a.date)).slice(0, limit);
 }

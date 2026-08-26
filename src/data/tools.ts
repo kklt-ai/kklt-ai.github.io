@@ -15,6 +15,8 @@ export interface NavSite {
   detail: string;
   /** 详情页亮点功能列表 */
   features: string[];
+  /** true 时暂时下架，不在网站中显示 */
+  hidden?: boolean;
 }
 
 // 在这里维护收录的宝藏网站，slug 一经确定不要修改
@@ -82,7 +84,7 @@ export const tools: NavSite[] = [
 /** 按分类分组，保持数据文件中分类出现的顺序 */
 export function getToolsByCategory(): { category: string; sites: NavSite[] }[] {
   const groups = new Map<string, NavSite[]>();
-  for (const site of tools) {
+  for (const site of tools.filter((site) => !site.hidden)) {
     const list = groups.get(site.category);
     if (list) {
       list.push(site);

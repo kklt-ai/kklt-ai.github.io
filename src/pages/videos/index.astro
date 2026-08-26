@@ -1,7 +1,9 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ShareButton from '../../components/ShareButton.astro';
-import { videos } from '../../data/videos';
+import { getVisibleVideos } from '../../data/videos';
+
+const videos = getVisibleVideos();
 ---
 
 <BaseLayout title="视频教程 · 卡卡罗特AI" description="卡卡罗特AI 的 B 站视频教程合集">

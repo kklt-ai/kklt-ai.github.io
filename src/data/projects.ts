@@ -11,6 +11,8 @@ export interface Project {
   featured?: boolean;
   /** 部署在外网、需要科学上网才能访问时标记，卡片上会显示「需要魔法」 */
   needVpn?: boolean;
+  /** true 时暂时下架，不在工具页显示 */
+  hidden?: boolean;
 }
 
 // 在这里维护你的 vibe-coding 个人项目，url 填项目地址即可

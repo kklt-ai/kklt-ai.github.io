@@ -5,6 +5,7 @@ export interface WechatArticle {
   url: string;   // 公众号文章链接
   date: string;
   pinned?: boolean; // true 时该文章在列表中置顶
+  hidden?: boolean; // true 时暂时下架，不在网站中显示
 }
 
 // 在这里维护你的公众号文章，新文章往数组最前面加
