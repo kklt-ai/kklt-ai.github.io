@@ -12,6 +12,14 @@ export interface Video {
 // 运行 node scripts/fetch-bilibili-videos.mjs <视频链接或BV号> 可自动抓取标题/简介/封面/时间
 export const videos: Video[] = [
   {
+    bvid: 'BV1MX8X6kENB',
+    title: 'AI时代，Git零基础教程：从Git安装配置到GitHub上传项目、克隆下载项目，一次讲清！',
+    description: '相关教程，GitHub零基础-5分钟保姆级使用教程：https://www.bilibili.com/video/BV1VtMk6YEcJ Git是AI编程最重要的基础，无论你是编程、写文案，还是做PPT等等，Git都能大大提高你的工作效…',
+    cover: '/covers/bili-BV1MX8X6kENB.jpg',
+    url: 'https://www.bilibili.com/video/BV1MX8X6kENB/',
+    date: '2026-08-26',
+  },
+  {
     bvid: 'BV1dR876WEjy',
     title: 'DeepSeek Harness 怎么安装？保姆级使用教程，快速入门！',
     description: '前几天DeepSeek发布Harness，被喷“毛坯房”，梁圣变梁子。结果GitHub狂揽153K Star，插件突破7000+，口碑两极反转，梁子重回梁帝。🤔 Harness到底是啥？ 一个公式你就懂了：Agent - 模型 = Har…',
