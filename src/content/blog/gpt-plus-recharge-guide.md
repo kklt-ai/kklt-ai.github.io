@@ -1,8 +1,9 @@
 ---
-title: "GPT Plus官方代充教程与常见问题"
+title: "ChatGPT 正规代充值，质保30天，稳定可靠！已代充数前人，持续复购中～"
 description: "GPT Plus 与 Pro 官方代充完整教程：从店铺下单、获取卡密和账号 JSON，到充值成功后的检查方法，并解答账号注册、封号风险、额度、Codex 手机号验证及多账号切换等常见问题。"
 pubDate: 2026-08-26
 tags: ["ChatGPT", "GPT Plus", "教程"]
+cover: /covers/ChatGTP-Charge.jpg
 pinned: true
 ---
 

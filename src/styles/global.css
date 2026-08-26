@@ -68,6 +68,14 @@ img {
   border-radius: var(--squiggle-2);
 }
 
+.article-card.pinned {
+  border-color: #d9b870;
+  border-width: 4px;
+  box-shadow:
+    0 0 0 4px rgba(217, 184, 112, 0.12),
+    5px 6px 0 rgba(43, 43, 43, 0.85);
+}
+
 /* ===== 手绘按钮 ===== */
 .sketch-btn {
   display: inline-block;
