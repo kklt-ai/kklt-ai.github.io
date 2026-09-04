@@ -17,7 +17,7 @@ pinned: true
 
 
 ## 1、充值地址
-**✅ 代充地址店铺：** [https://pay.ldxp.cn/shop/6688](https://pay.ldxp.cn/shop/6688)
+**✅ 代充地址店铺：** [https://wzyp.cn/shop/6688](https://wzyp.cn/shop/6688)
 
 > 价格可能有调整，以网站价格为准
 >
