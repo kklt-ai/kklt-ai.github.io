@@ -12,6 +12,7 @@ const blog = defineCollection({
     pinned: z.boolean().default(false),
     hidden: z.boolean().default(false),
     wechatUrl: z.string().url().optional(),
+    yuqueUrl: z.string().url().optional(),
   }),
 });
 

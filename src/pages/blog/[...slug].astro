@@ -77,7 +77,7 @@ const nextPost = postIndex >= 0 ? sortedPosts[postIndex + 1] : undefined;
         }
       </div>
       {post.data.description && <p class="post-desc">{post.data.description}</p>}
-      <p class="post-notice">📌 公众号同名文章备份 · 原文失效时这里仍可阅读</p>
+      <p class="post-notice">📌 {post.data.yuqueUrl ? '语雀文章备份' : '公众号同名文章备份'} · 原文失效时这里仍可阅读</p>
     </header>
 
     {

@@ -1,0 +1,4 @@
+interface:
+  display_name: "导入语雀文章"
+  short_description: "通过语雀链接保存正文、下载图片并加入当前 Astro 博客文章库"
+  default_prompt: "使用 $import-yuque-article 把这个语雀链接的文章和图片保存到当前博客文章库。"
