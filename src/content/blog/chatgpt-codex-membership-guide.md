@@ -82,7 +82,7 @@ ChatGPT目前有上面这几个等级会员。
 
 <img src="/blog/chatgpt-codex-membership-guide/09.png" width="313.3333416338322" title="" crop="0,0,1,1" id="u2c152f9b" class="ne-image">
 
-**或者你可以，里面有美G实体手机号可验证。**
+遇到 Codex 手机号验证提示？点击[Codex手机号验证](https://wzyp.cn/shop/6688)，查看验证服务和操作说明。
 
 <img src="/blog/chatgpt-codex-membership-guide/10.png" width="613.8889051513912" title="" crop="0,0,1,1" id="ud4dedf7d" class="ne-image">
 
@@ -131,6 +131,10 @@ Pro模型目前分三档，主要区别是在额度。
 <img src="/blog/chatgpt-codex-membership-guide/16.png" width="858.8889116416749" title="" crop="0,0,1,1" id="u402d1f5f" class="ne-image">
 
 以上就是ChatGPT Go 、Plus、 Pro订阅的会员等级的主要区别了。
+
+> **需要开通 ChatGPT 会员，或者遇到手机号验证问题？**
+>
+> 欢迎逛逛[我的AI代充小店](https://wzyp.cn/shop/6688)，提供 **ChatGPT 会员代充、Codex 手机号验证**服务，按需选择，套餐和操作说明都在店铺页面。
 
 <img src="/blog/chatgpt-codex-membership-guide/17.png" width="613.8889051513912" title="" crop="0,0,1,1" id="u5ec4dd81" class="ne-image">
 

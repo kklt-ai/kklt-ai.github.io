@@ -713,12 +713,39 @@ const nextPost = postIndex >= 0 ? sortedPosts[postIndex + 1] : undefined;
     margin: 1.2em auto;
   }
 
-  .prose :global(a) {
-    color: var(--accent-3);
+  .prose :global(a:not(:has(img))) {
+    color: var(--ink);
     font-weight: 700;
-    text-decoration-style: wavy;
-    text-decoration-color: var(--accent-4);
-    text-underline-offset: 4px;
+    text-decoration: none;
+    background: rgba(244, 185, 66, 0.2);
+    border: 1.5px solid var(--ink);
+    border-radius: 7px 3px 8px 4px / 4px 8px 3px 7px;
+    padding: 0.05em 0.3em;
+    box-shadow: 2px 2px 0 rgba(43, 43, 43, 0.75);
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+    overflow-wrap: anywhere;
+    transition: background-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .prose :global(a:not(:has(img)):hover) {
+    background: var(--highlight);
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  .prose :global(a:not(:has(img)):focus-visible) {
+    outline: 3px solid var(--accent-3);
+    outline-offset: 4px;
+  }
+
+  .prose :global(a:not(:has(img)):active) {
+    box-shadow: none;
+  }
+
+  .prose :global(a[href^='http']:not(:has(img))::after) {
+    content: '↗';
+    margin-left: 0.2em;
+    font-size: 0.85em;
   }
 
   .prose :global(hr) {
